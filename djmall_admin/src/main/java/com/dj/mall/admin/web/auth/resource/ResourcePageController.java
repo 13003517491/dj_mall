@@ -21,21 +21,21 @@ public class ResourcePageController {
         return "resource/resource_list";
     }
 
-    /**
-     * 去新增
-     */
-    @RequestMapping("toAdd/{pId}")
-    public String toAdd(@PathVariable Integer pId, Model model) {
-        model.addAttribute("pId", pId);
-        return "resource/resource_add";
-    }
-
-    /**
-     * 去修改页面
-     */
-    @RequestMapping("toUpdate")
-    public String toUpdate(Integer resourceId, Model model) throws Exception {
-        model.addAttribute("resource", resourceApi.getResourceById(resourceId));
-        return "resource/resource_update";
-    }
+//    /**
+//     * 去新增
+//     */
+//    @RequestMapping("toAdd/{pId}")
+//    public String toAdd(@PathVariable Integer pId, Model model) {
+//        model.addAttribute("pId", pId);
+//        return "resource/resource_add";
+//    }
+//
+//    /**
+//     * 去修改页面
+//     */
+//    @RequestMapping("toUpdate")
+//    public String toUpdate(Integer resourceId, Model model) throws Exception {
+//        model.addAttribute("resource", resourceApi.getResourceById(resourceId));
+//        return "resource/resource_update";
+//    }
 }

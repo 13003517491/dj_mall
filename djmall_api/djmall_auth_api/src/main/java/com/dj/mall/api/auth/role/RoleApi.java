@@ -32,4 +32,18 @@ public interface RoleApi {
      * @throws Exception
      */
     void saveRole(RoleDTOReq roleDTOReq) throws Exception;
+
+    /**
+     * 根据id获取角色
+     * @param id 角色id
+     * @throws Exception
+     */
+    RoleDTOResp getRoleById(Integer id) throws Exception;
+
+    /**
+     * 根据角色id 修改角色名
+     * @param roleName 角色名
+     * @param roleId 角色id
+     */
+    void updateRoleNameById(String roleName, Integer roleId) throws Exception;
 }

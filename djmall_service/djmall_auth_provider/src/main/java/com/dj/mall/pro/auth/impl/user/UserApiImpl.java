@@ -301,11 +301,11 @@ public class UserApiImpl extends ServiceImpl<UserMapper, UserEntity> implements 
     @Override
     public void delUserAndUserRoleByIds(Integer[] ids) throws Exception {
         UpdateWrapper<UserEntity> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.set("is_del", SystemConstant.NOT_DEL);
+        updateWrapper.set("is_del", SystemConstant.NOT_SHOW);
         updateWrapper.in("id", ids);
         this.update(updateWrapper);
         UpdateWrapper<UserRoleEntity> updateWrapper1 = new UpdateWrapper<>();
-        updateWrapper1.set("is_del", SystemConstant.NOT_DEL);
+        updateWrapper1.set("is_del", SystemConstant.NOT_SHOW);
         updateWrapper1.in("user_id", ids);
         userRoleService.update(updateWrapper1);
     }

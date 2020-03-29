@@ -11,6 +11,7 @@ import com.dj.mall.model.base.ResultModel;
 import com.dj.mall.model.constant.SystemConstant;
 import com.dj.mall.model.dto.auth.resource.ResourceDTOReq;
 import com.dj.mall.model.dto.auth.resource.ResourceDTOResp;
+import com.dj.mall.model.dto.auth.user.UserDTOResp;
 import com.dj.mall.model.util.DozerUtil;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,14 +39,14 @@ public class ResourceController {
      */
     @RequestMapping("list")
     public ResultModel<Object> list(HttpSession session) {
-        List<ResourceVOResp> resourceVORespList = (List<ResourceVOResp>) session.getAttribute("resourceEntity");
-        List<ResourceVOResp> menuList = new ArrayList<>();
-        for (ResourceVOResp resource : resourceVORespList) {
+        UserDTOResp userDTORespList = (UserDTOResp) session.getAttribute("userEntity");
+        List<ResourceDTOResp> menuList = new ArrayList<>();
+        for (ResourceDTOResp resource : userDTORespList.getPermissionList()) {
             if (resource.getResourceType().equals(SystemConstant.MENU_SHOW)) {
                 menuList.add(resource);
             }
         }
-        return new ResultModel<>().success(menuList);
+        return new ResultModel<>().success(DozerUtil.mapList(menuList, ResourceVOResp.class));
     }
 
     /**
@@ -59,31 +60,31 @@ public class ResourceController {
         return new ResultModel<>().success(resourceDTORespList);
     }
 
-    /**
-     * 资源名去重
-     */
-    @RequestMapping("findByResourceName")
-    public Boolean findByRoleName(String resourceName) throws Exception{
-        resourceApi.distinct(resourceName);
-        return true;
-    }
-
-    /**
-     * 资源修改
-     */
-    @RequestMapping("update")
-    public ResultModel<Object> update(ResourceVOReq resourceVOReq) throws Exception {
-        resourceApi.updateResourceById(DozerUtil.map(resourceVOReq, ResourceDTOReq.class));
-        return new ResultModel<>().success();
-    }
-
-    /**
-     * 资源删除
-     */
-    @RequestMapping("delById")
-    public ResultModel<Object> delById(Integer id) throws Exception {
-        resourceApi.delResAndRoleResByIds(id);
-        return new ResultModel<>().success();
-    }
+//    /**
+//     * 资源名去重
+//     */
+//    @RequestMapping("findByResourceName")
+//    public Boolean findByRoleName(String resourceName) throws Exception{
+//        resourceApi.distinct(resourceName);
+//        return true;
+//    }
+//
+//    /**
+//     * 资源修改
+//     */
+//    @RequestMapping("update")
+//    public ResultModel<Object> update(ResourceVOReq resourceVOReq) throws Exception {
+//        resourceApi.updateResourceById(DozerUtil.map(resourceVOReq, ResourceDTOReq.class));
+//        return new ResultModel<>().success();
+//    }
+//
+//    /**
+//     * 资源删除
+//     */
+//    @RequestMapping("delById")
+//    public ResultModel<Object> delById(Integer id) throws Exception {
+//        resourceApi.delResAndRoleResByIds(id);
+//        return new ResultModel<>().success();
+//    }
 
 }

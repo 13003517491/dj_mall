@@ -37,7 +37,7 @@ public class ResourceApiImpl extends ServiceImpl<ResourceMapper, ResourceEntity>
      */
     @Override
     public List<ResourceDTOResp> getUserResourceList(Integer userId) throws Exception {
-        return DozerUtil.mapList(this.getUserResourceList(userId), ResourceDTOResp.class);
+        return DozerUtil.mapList(getBaseMapper().getUserResourceList(userId), ResourceDTOResp.class);
     }
 
     /**

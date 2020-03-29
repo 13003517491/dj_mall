@@ -1,10 +1,6 @@
 package com.dj.mall.model.constant;
 
 public class SystemConstant {
-	/**
-	 * 系统正在维护...请稍后再试
-	 */
-	public static final String ERROR = "系统正在维护...请稍后再试";
 
 	/**
 	 * 用户名或密码不得为空
@@ -30,11 +26,6 @@ public class SystemConstant {
 	 * 该用户未被激活，请联系管理员激活
 	 */
 	public static final String NOT_ACTIVE = "该用户未被激活，请联系管理员激活";
-
-	/**
-	 * 正常显示
-	 */
-    public static final Integer NOT_DEL = 1;
 
 	/**
 	 * 激活邮件主题
@@ -67,12 +58,17 @@ public class SystemConstant {
     public static final Integer MENU_SHOW = 1;
 
 	/**
-	 * 正常显示
+	 * 伪删除
 	 */
-	public static final Integer NOT_SHOW = 1;
+	public static final Integer NOT_SHOW = -1;
 
 	/**
 	 * 已被激活
 	 */
 	public static final String YES_ACTIVE = "已被激活";
+
+	/**
+	 * 正常展示
+	 */
+	public static final Integer NOT_DEL = 1;
 }

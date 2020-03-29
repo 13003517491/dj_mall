@@ -13,12 +13,12 @@
         function update (){
             var index = layer.load(1,{shade:0.5});
             $.post(
-                "<%=request.getContextPath()%>/user/updateUserRole",
+                "<%=request.getContextPath()%>/auth/user/updateUserRole",
                 $("#fm").serialize(),
                 function(data){
                     if (data.code != -1) {
                         layer.msg(data.msg, {icon: 6}, function(){
-                            parent.window.location.href = "<%=request.getContextPath()%>/user/toList";
+                            parent.window.location.href = "<%=request.getContextPath()%>/auth/user/toList";
                         });
                         return;
                     }
@@ -45,7 +45,7 @@
             <tr>
                 <td>
                     <input type="radio" name="roleId" value="${r.roleId}" <c:if test="${r.roleId == userRole.roleId}">checked</c:if>>
-                    ${r.id}
+                    ${r.roleId}
                 </td>
                 <td>${r.roleName}</td>
             </tr>

@@ -8,6 +8,7 @@ import com.dj.mall.api.auth.user.UserApi;
 import com.dj.mall.entity.auth.resource.ResourceEntity;
 import com.dj.mall.model.base.BusinessException;
 import com.dj.mall.model.constant.SystemConstant;
+import com.dj.mall.model.dto.auth.resource.ResourceDTOResp;
 import com.dj.mall.model.dto.auth.user.UserDTOReq;
 
 import com.dj.mall.model.dto.auth.user.UserDTOResp;
@@ -44,8 +45,8 @@ public class ShiroRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         //获取当前登录用户权限信息
         Session session = SecurityUtils.getSubject().getSession();
-        List<ResourceVOResp> resourceList = (List<ResourceVOResp>) session.getAttribute("resourceEntity");
-        for (ResourceEntity resourceEntity : DozerUtil.mapList(resourceList, ResourceEntity.class)) {
+        UserDTOResp userDTOResp = (UserDTOResp) session.getAttribute("userEntity");
+        for (ResourceDTOResp resourceEntity : userDTOResp.getPermissionList()) {
             simpleAuthorizationInfo.addStringPermission(resourceEntity.getUrl());
         }
         return simpleAuthorizationInfo;
@@ -64,10 +65,10 @@ public class ShiroRealm extends AuthorizingRealm {
         String username = (String) authenticationToken.getPrincipal();
         // 得到密码
         String password = new String((char[]) authenticationToken.getCredentials());
-            UserDTOReq userDTOReq = new UserDTOReq();
-            userDTOReq.setPassword(password);
-            userDTOReq.setUsername(username);
-            UserDTOResp userDTOResp = userApi.getUser(userDTOReq);
+        UserDTOReq userDTOReq = new UserDTOReq();
+        userDTOReq.setPassword(password);
+        userDTOReq.setUsername(username);
+        UserDTOResp userDTOResp = userApi.getUser(userDTOReq);
 //            if (null == userDTOResp) {
 //                throw new AccountException(SystemConstant.LOGIN_ERROR);
 //            }
@@ -77,9 +78,9 @@ public class ShiroRealm extends AuthorizingRealm {
 //            if (userDTOResp.getStatus() != 1) {
 //                throw new LockedAccountException(SystemConstant.NOT_ACTIVE);
 //            }
-            Session session = SecurityUtils.getSubject().getSession();
-            session.setAttribute("userEntity", DozerUtil.map(userDTOResp, UserVOResp.class));
-            session.setAttribute("resourceEntity", DozerUtil.mapList(resourceApi.getUserResourceList(userDTOResp.getUserId()), ResourceVOResp.class));
+        userDTOResp.setPermissionList(resourceApi.getUserResourceList(userDTOResp.getUserId()));
+        Session session = SecurityUtils.getSubject().getSession();
+        session.setAttribute("userEntity", userDTOResp);
         return new SimpleAuthenticationInfo(username, password, getName());
     }
 }

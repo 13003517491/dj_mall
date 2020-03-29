@@ -34,7 +34,7 @@
 <body>
 
 <form id = "fm">
-    <input type="hidden" name="userId" value="${user.id}"><br />
+    <input type="hidden" name="userId" value="${user.userId}"><br />
     用户名:<input type="text" name="username" value="${user.username}"><br />
     手机号:<input type="text" name="phone" value="${user.phone}"><br />
     邮箱:<input type="text" name="email" value="${user.email}"><br />

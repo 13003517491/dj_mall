@@ -3,6 +3,7 @@ package com.dj.mall.pro.auth.impl.role;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dj.mall.api.auth.role.RoleApi;
 import com.dj.mall.entity.auth.role.RoleEntity;
@@ -61,5 +62,30 @@ public class RoleApiImpl extends ServiceImpl<RoleMapper, RoleEntity> implements 
     @Override
     public void saveRole(RoleDTOReq roleDTOReq) throws Exception {
         this.save(DozerUtil.map(roleDTOReq, RoleEntity.class));
+    }
+
+    /**
+     * 根据id获取角色
+     *
+     * @param id 角色id
+     * @throws Exception
+     */
+    @Override
+    public RoleDTOResp getRoleById(Integer id) throws Exception {
+        return  DozerUtil.map(this.getById(id), RoleDTOResp.class);
+    }
+
+    /**
+     * 根据角色id 修改角色名
+     *
+     * @param roleName 角色名
+     * @param roleId   角色id
+     */
+    @Override
+    public void updateRoleNameById(String roleName, Integer roleId) throws Exception {
+        UpdateWrapper<RoleEntity> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.set("role_name", roleName);
+        updateWrapper.eq("id", roleId);
+        this.update(updateWrapper);
     }
 }

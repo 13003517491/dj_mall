@@ -1,6 +1,10 @@
 package com.dj.mall.admin.web.auth.role;
 
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.dj.mall.api.auth.role.RoleApi;
+import com.dj.mall.model.dto.auth.role.RoleDTOResp;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -11,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/auth/role/")
 public class RolePageController {
+
+    @Reference
+    private RoleApi roleApi;
 
     /**
      * 去展示
@@ -26,5 +33,15 @@ public class RolePageController {
     @RequestMapping("toAdd")
     public String toAdd() {
         return "role/role_add";
+    }
+
+    /**
+     * 去修改页面
+     */
+    @RequestMapping("toUpdate")
+    public String toUpdate(Integer id, Model model) throws Exception {
+        RoleDTOResp roleDTOResp = roleApi.getRoleById(id);
+        model.addAttribute("role", roleDTOResp);
+        return "role/role_update";
     }
 }

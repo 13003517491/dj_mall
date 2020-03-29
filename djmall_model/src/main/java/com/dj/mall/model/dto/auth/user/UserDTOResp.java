@@ -1,11 +1,13 @@
 package com.dj.mall.model.dto.auth.user;
 
+import com.dj.mall.model.dto.auth.resource.ResourceDTOResp;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @描述 用户DTO-Resp对象
@@ -100,5 +102,10 @@ public class UserDTOResp implements Serializable {
      * 角色展示
      */
     private String roleShow;
+
+    /**
+     * 用户权限集合
+     */
+    private List<ResourceDTOResp> permissionList;
 
 }

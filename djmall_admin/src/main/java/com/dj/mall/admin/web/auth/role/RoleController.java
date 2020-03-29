@@ -2,6 +2,7 @@ package com.dj.mall.admin.web.auth.role;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.dj.mall.admin.vo.auth.role.RoleVOReq;
 import com.dj.mall.admin.vo.auth.role.RoleVOResp;
 import com.dj.mall.api.auth.role.RoleApi;
@@ -45,6 +46,18 @@ public class RoleController {
     @RequestMapping("distinct")
     public Boolean findByRoleName(String roleName) throws Exception {
         return roleApi.distinct(roleName);
+    }
+
+    /**
+     * 角色修改
+     * @param roleName 角色名
+     * @param roleId 角色id
+     * @return
+     */
+    @RequestMapping("update")
+    public ResultModel<Object> update(String roleName, Integer roleId) throws Exception {
+        roleApi.updateRoleNameById(roleName, roleId);
+        return new ResultModel<>().success();
     }
 
 }

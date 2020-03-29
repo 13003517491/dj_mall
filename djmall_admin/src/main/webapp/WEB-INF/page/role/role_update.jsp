@@ -13,12 +13,12 @@
         function update (){
             var index = layer.load(1,{shade:0.5});
             $.post(
-                "<%=request.getContextPath()%>/role/update",
+                "<%=request.getContextPath()%>/auth/role/update",
                 $("#fm").serialize(),
                 function(data){
                     if (data.code != -1) {
                         layer.msg(data.msg, {icon: 6}, function(){
-                            parent.window.location.href = "<%=request.getContextPath()%>/role/toList";
+                            parent.window.location.href = "<%=request.getContextPath()%>/auth/role/toList";
                         });
                         return;
                     }
@@ -34,7 +34,7 @@
 <body>
 
 <form id = "fm">
-    <input type="hidden" name="id" value="${role.id}"><br />
+    <input type="hidden" name="roleId" value="${role.roleId}"><br />
     角色名:<input type="text" name="roleName" value="${role.roleName}"><br />
     <input type="button" value="修改提交" onclick="update()"><br />
 </form>
