@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dj.mall.mapper.auth.user.UserMapper">
+
+    <sql id="USERCOLUMN">
+        id,
+        username,
+        password,
+        nickname,
+        phone,
+        email,
+        sex,
+        status,
+        create_time,
+        last_login_time,
+        is_del
+
+    </sql>
+
+    <!-- 展示 -->
+    <select id = "findUserAll" resultType = "com.dj.mall.mapper.bo.user.UserBOResp">
+        select
+            u.id AS userId,
+            u.username,
+            u.password,
+            u.nickname,
+            u.phone,
+            u.email,
+            u.sex,
+            u.status,
+            u.create_time,
+            u.last_login_time,
+            u.is_del,
+            r.role_name AS roleShow,
+            r.id AS roleId
+        from
+            djmall_auth_user u
+        left join djmall_auth_user_role ur on u.id = ur.user_id
+        left join djmall_auth_role r on ur.role_id =r.id
+        <where>
+            <if test="username != null and username != '' ">
+                u.username = #{username} or u.phone = #{username} or u.email = #{username}
+            </if>
+            <if test="roleId != null">
+                and ur.role_id = #{roleId}
+            </if>
+            <if test="sex != null">
+                and u.sex = #{sex}
+            </if>
+            <if test="status != null">
+                and u.status = #{status}
+            </if>
+            and u.is_del = 1
+            and ur.is_del = 1
+            and r.is_del = 1
+        </where>
+    </select>
+</mapper>
