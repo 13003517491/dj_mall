@@ -5,28 +5,22 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dj.mall.api.auth.user.UserApi;
+import com.dj.mall.entity.auth.role.RoleEntity;
 import com.dj.mall.entity.auth.user.UserEntity;
 import com.dj.mall.entity.auth.user.UserRoleEntity;
+import com.dj.mall.mapper.auth.role.RoleMapper;
 import com.dj.mall.mapper.auth.user.UserMapper;
 import com.dj.mall.mapper.bo.user.UserBOReq;
 import com.dj.mall.model.base.BusinessException;
-import com.dj.mall.model.base.ResultModel;
 import com.dj.mall.model.constant.SystemConstant;
+import com.dj.mall.model.dto.auth.role.RoleDTOResp;
 import com.dj.mall.model.dto.auth.user.UserDTOReq;
 import com.dj.mall.model.dto.auth.user.UserDTOResp;
 import com.dj.mall.model.util.DozerUtil;
-import com.dj.mall.model.util.JavaEmailUtils;
 import com.dj.mall.pro.auth.service.user.UserRoleService;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AccountException;
-import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.util.StringUtils;
 
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -39,11 +33,10 @@ import java.util.List;
 @Service
 public class UserApiImpl extends ServiceImpl<UserMapper, UserEntity> implements UserApi {
 
-    @Autowired
-    private UserMapper userMapper;
 
     @Autowired
     private UserRoleService userRoleService;
+
 
     /**
      * 根据用户名和密码获取用户信息
@@ -223,7 +216,7 @@ public class UserApiImpl extends ServiceImpl<UserMapper, UserEntity> implements 
      */
     @Override
     public List<UserDTOResp> findUserAll(UserDTOReq userDTOReq) throws Exception {
-        return DozerUtil.mapList(userMapper.findUserAll(DozerUtil.map(userDTOReq, UserBOReq.class)), UserDTOResp.class);
+        return DozerUtil.mapList(getBaseMapper().findUserAll(DozerUtil.map(userDTOReq, UserBOReq.class)), UserDTOResp.class);
     }
 
     /**
@@ -269,4 +262,20 @@ public class UserApiImpl extends ServiceImpl<UserMapper, UserEntity> implements 
         updateWrapper.eq("user_id", userId);
         userRoleService.update(updateWrapper);
     }
+
+    /**
+     * 根据id获取用户角色
+     *
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public UserRoleEntity getUserRole(Integer id) throws Exception {
+        QueryWrapper<UserRoleEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", id);
+        return userRoleService.getOne(queryWrapper);
+    }
+
+
 }

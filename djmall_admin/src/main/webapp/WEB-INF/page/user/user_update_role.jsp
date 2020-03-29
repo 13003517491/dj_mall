@@ -44,7 +44,7 @@
         <c:forEach items="${roleList}" var="r">
             <tr>
                 <td>
-                    <input type="radio" name="roleId" value="${r.id}" <c:if test="${r.id == userRole.roleId}">checked</c:if>>
+                    <input type="radio" name="roleId" value="${r.roleId}" <c:if test="${r.roleId == userRole.roleId}">checked</c:if>>
                     ${r.id}
                 </td>
                 <td>${r.roleName}</td>

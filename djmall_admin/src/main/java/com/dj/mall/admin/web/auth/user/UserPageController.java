@@ -7,6 +7,7 @@ import com.dj.mall.api.auth.role.RoleApi;
 import com.dj.mall.api.auth.user.UserApi;
 import com.dj.mall.entity.auth.user.UserRoleEntity;
 import com.dj.mall.model.constant.SystemConstant;
+import com.dj.mall.model.dto.auth.role.RoleDTOResp;
 import com.dj.mall.model.dto.auth.user.UserDTOResp;
 import com.dj.mall.model.util.DozerUtil;
 import com.dj.mall.model.util.PasswordSecurityUtil;
@@ -93,21 +94,16 @@ public class UserPageController {
         return "user/user_update";
     }
 
-//    /**
-//     * 去授权页面
-//     */
-//    @RequestMapping("toUpdateRole/{id}")
-//    public String toUpdateRole(@PathVariable Integer id, Model model) {
-//        QueryWrapper<UserRole> queryWrapper1 = new QueryWrapper<>();
-//        queryWrapper1.eq("user_id", id);
-//        UserRole userRole = userRoleService.getOne(queryWrapper1);
-//
-//        QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
-//        queryWrapper.eq("is_del", SystemConstant.NUMBER_ONE);
-//        List<Role> roleList = roleService.list(queryWrapper);
-//        model.addAttribute("userRole", userRole);
-//        model.addAttribute("roleList", roleList);
-//        return "user/user_update_role";
-//    }
+    /**
+     * 去授权页面
+     */
+    @RequestMapping("toUpdateRole/{id}")
+    public String toUpdateRole(@PathVariable Integer id, Model model) throws Exception {
+        UserRoleEntity userRole = userApi.getUserRole(id);
+        List<RoleDTOResp> roleList = roleApi.getRole();
+        model.addAttribute("userRole", userRole);
+        model.addAttribute("roleList", roleList);
+        return "user/user_update_role";
+    }
 
 }
