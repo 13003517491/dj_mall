@@ -46,4 +46,11 @@ public interface RoleApi {
      * @param roleId 角色id
      */
     void updateRoleNameById(String roleName, Integer roleId) throws Exception;
+
+    /**
+     * 删除关联角色
+     * @param id 角色id
+     * @throws Exception
+     */
+    void delroleResAndUserRoleAndUserById(Integer id) throws Exception;
 }

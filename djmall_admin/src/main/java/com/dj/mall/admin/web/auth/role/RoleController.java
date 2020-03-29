@@ -60,4 +60,13 @@ public class RoleController {
         return new ResultModel<>().success();
     }
 
+    /**
+     * 角色删除
+     */
+    @RequestMapping("delById")
+    public ResultModel<Object> delById(Integer id) throws Exception {
+        roleApi.delroleResAndUserRoleAndUserById(id);
+        return new ResultModel<>().success();
+    }
+
 }
