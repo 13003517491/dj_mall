@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.dj.mall.admin.vo.auth.user.UserVOReq;
 import com.dj.mall.admin.vo.auth.user.UserVOResp;
 import com.dj.mall.api.auth.user.UserApi;
+import com.dj.mall.entity.auth.user.UserEntity;
 import com.dj.mall.model.base.BusinessException;
 import com.dj.mall.model.base.ResultModel;
 import com.dj.mall.model.constant.SystemConstant;
@@ -166,6 +167,21 @@ public class UserController {
     @RequestMapping("updateUserRole")
     public ResultModel<Object> updateUserRole(Integer userId, Integer roleId) throws Exception {
         userApi.updateUserRole(userId, roleId);
+        return new ResultModel<>().success();
+    }
+
+    /**
+     * 用户激活
+     * @param id
+     * @return
+     */
+    @RequestMapping("updateStatusById")
+    public ResultModel<Object> updateStatusById(Integer id) throws Exception {
+        UserDTOResp userDTOResp = userApi.getUserById(id);
+        if (userDTOResp.getStatus().equals(SystemConstant.ACTIVE_SUCCESS)) {
+            return new ResultModel<>().error(SystemConstant.YES_ACTIVE);
+        }
+        userApi.updateUser(id);
         return new ResultModel<>().success();
     }
 

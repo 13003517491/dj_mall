@@ -70,4 +70,9 @@ public class SystemConstant {
 	 * 正常显示
 	 */
 	public static final Integer NOT_SHOW = 1;
+
+	/**
+	 * 已被激活
+	 */
+	public static final String YES_ACTIVE = "已被激活";
 }

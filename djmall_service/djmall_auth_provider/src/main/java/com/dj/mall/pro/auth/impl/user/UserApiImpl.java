@@ -12,6 +12,7 @@ import com.dj.mall.mapper.auth.role.RoleMapper;
 import com.dj.mall.mapper.auth.user.UserMapper;
 import com.dj.mall.mapper.bo.user.UserBOReq;
 import com.dj.mall.model.base.BusinessException;
+import com.dj.mall.model.base.ResultModel;
 import com.dj.mall.model.constant.SystemConstant;
 import com.dj.mall.model.dto.auth.role.RoleDTOResp;
 import com.dj.mall.model.dto.auth.user.UserDTOReq;
@@ -278,4 +279,17 @@ public class UserApiImpl extends ServiceImpl<UserMapper, UserEntity> implements 
     }
 
 
+    /**
+     * 修改用户
+     *
+     * @param id 用户id
+     * @throws Exception
+     */
+    @Override
+    public void updateUser(Integer id) throws Exception {
+        UpdateWrapper<UserEntity> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.set("status", SystemConstant.ACTIVE_SUCCESS);
+        updateWrapper.eq("id", id);
+        this.update(updateWrapper);
+    }
 }

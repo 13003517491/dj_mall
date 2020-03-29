@@ -118,4 +118,10 @@ public interface UserApi {
      */
     UserRoleEntity getUserRole(Integer id) throws Exception;
 
+    /**
+     * 用户激活
+     * @param id 用户id
+     * @throws Exception
+     */
+    void updateUser(Integer id) throws Exception;
 }
