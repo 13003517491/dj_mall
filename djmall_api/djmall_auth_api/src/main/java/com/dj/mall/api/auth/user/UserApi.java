@@ -124,4 +124,10 @@ public interface UserApi {
      * @throws Exception
      */
     void updateUser(Integer id) throws Exception;
+
+    /**
+     * 批量删除用户
+     * @param ids 用户id
+     */
+    void delUserAndUserRoleByIds(Integer[] ids) throws Exception;
 }

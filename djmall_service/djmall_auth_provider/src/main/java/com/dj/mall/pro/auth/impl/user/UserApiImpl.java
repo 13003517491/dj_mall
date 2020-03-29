@@ -292,4 +292,21 @@ public class UserApiImpl extends ServiceImpl<UserMapper, UserEntity> implements 
         updateWrapper.eq("id", id);
         this.update(updateWrapper);
     }
+
+    /**
+     * 批量删除用户
+     *
+     * @param ids 用户id
+     */
+    @Override
+    public void delUserAndUserRoleByIds(Integer[] ids) throws Exception {
+        UpdateWrapper<UserEntity> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.set("is_del", SystemConstant.NOT_DEL);
+        updateWrapper.in("id", ids);
+        this.update(updateWrapper);
+        UpdateWrapper<UserRoleEntity> updateWrapper1 = new UpdateWrapper<>();
+        updateWrapper1.set("is_del", SystemConstant.NOT_DEL);
+        updateWrapper1.in("user_id", ids);
+        userRoleService.update(updateWrapper1);
+    }
 }

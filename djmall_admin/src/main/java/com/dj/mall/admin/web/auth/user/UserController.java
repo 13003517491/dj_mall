@@ -185,4 +185,15 @@ public class UserController {
         return new ResultModel<>().success();
     }
 
+    /**
+     * 批量伪删除
+     * @param ids 用户id
+     * @return
+     */
+    @RequestMapping("delByIds")
+    public ResultModel<Object> delByIds(Integer[] ids) throws Exception {
+        userApi.delUserAndUserRoleByIds(ids);
+        return new ResultModel<>().success();
+    }
+
 }
