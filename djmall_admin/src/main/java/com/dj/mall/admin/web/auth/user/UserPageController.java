@@ -35,7 +35,6 @@ public class UserPageController {
     @Reference
     private RoleApi roleApi;
 
-
     /**
      * 去登录页面
      */

@@ -42,6 +42,11 @@ public class ResourceDTOResp implements Serializable {
      */
     private Integer resourceType;
 
+    /**
+     * 资源编码
+     */
+    private String resourceCode;
+
 
 
 }

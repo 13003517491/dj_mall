@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.dj.mall.api.auth.resource.ResourceApi;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -33,14 +34,14 @@ public class ResourcePageController {
         return "resource/resource_update";
     }
 
-//    /**
-//     * 去新增
-//     */
-//    @RequestMapping("toAdd/{pId}")
-//    public String toAdd(@PathVariable Integer pId, Model model) {
-//        model.addAttribute("pId", pId);
-//        return "resource/resource_add";
-//    }
+    /**
+     * 去新增
+     */
+    @RequestMapping("toAdd/{pId}")
+    public String toAdd(@PathVariable Integer pId, Model model) {
+        model.addAttribute("pId", pId);
+        return "resource/resource_add";
+    }
 //
 
 }

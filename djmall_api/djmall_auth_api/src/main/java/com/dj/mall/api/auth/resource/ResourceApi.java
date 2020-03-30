@@ -56,4 +56,10 @@ public interface ResourceApi {
      */
     void delResAndRoleResByIds(Integer id) throws Exception;
 
+    /**
+     * 新增资源
+     * @param resourceDTOReq 接收参数
+     * @throws Exception
+     */
+    void saveResource(ResourceDTOReq resourceDTOReq) throws Exception;
 }

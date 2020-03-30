@@ -67,7 +67,7 @@
             // }
             // var pId = selectNodes[0].id;
             if (selectNodes.length > 0) {
-                var pId = selectNodes[0].id;
+                var pId = selectNodes[0].resourceId;
             } else {
                 var pId = 0;
             }

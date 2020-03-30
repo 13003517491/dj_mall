@@ -64,6 +64,9 @@ public class ResourceController {
 
     /**
      * 资源名去重
+     * @param resourceName 资源名
+     * @return
+     * @throws Exception
      */
     @RequestMapping("findByResourceName")
     public Boolean findByRoleName(String resourceName) throws Exception{
@@ -74,6 +77,9 @@ public class ResourceController {
 
     /**
      * 资源修改
+     * @param resourceVOReq 接参数
+     * @return
+     * @throws Exception
      */
     @RequestMapping("update")
     public ResultModel<Object> update(ResourceVOReq resourceVOReq) throws Exception {
@@ -83,6 +89,9 @@ public class ResourceController {
 
     /**
      * 资源删除
+     * @param id 资源删除
+     * @return
+     * @throws Exception
      */
     @RequestMapping("delById")
     public ResultModel<Object> delById(Integer id) throws Exception {
@@ -90,6 +99,15 @@ public class ResourceController {
         return new ResultModel<>().success();
     }
 
-
+    /**
+     * 资源新增
+     * @param resourceVOReq 接收参数
+     * @return
+     */
+    @RequestMapping("add")
+    public ResultModel<Object> add(ResourceVOReq resourceVOReq) throws Exception {
+        resourceApi.saveResource(DozerUtil.map(resourceVOReq, ResourceDTOReq.class));
+        return new ResultModel<>().success();
+    }
 
 }

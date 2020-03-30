@@ -130,4 +130,16 @@ public class ResourceApiImpl extends ServiceImpl<ResourceMapper, ResourceEntity>
             }
         }
     }
+
+    /**
+     * 新增资源
+     *
+     * @param resourceDTOReq 接收参数
+     * @throws Exception
+     */
+    @Override
+    public void saveResource(ResourceDTOReq resourceDTOReq) throws Exception {
+        resourceDTOReq.setResourceCode(resourceDTOReq.getResourceCode().toUpperCase());
+        this.save(DozerUtil.map(resourceDTOReq, ResourceEntity.class));
+    }
 }

@@ -21,7 +21,7 @@
                         minlength:2,
                         remote: {
                             type: 'POST',
-                            url: "<%=request.getContextPath()%>/role/findByResourceName",
+                            url: "<%=request.getContextPath()%>/auth/resource/findByResourceName",
                             data:{
                                 userName:function() {
                                     return $("#resourceName").val();
@@ -55,7 +55,7 @@
                 }
                 var index = layer.load(1,{shade:0.5});
                 /* layer.confirm('确定添加吗?', {icon: 3, title:'提示'}, function(index){ */
-                $.post("<%=request.getContextPath()%>/resource/add",
+                $.post("<%=request.getContextPath()%>/auth/resource/add",
                     $("#fm").serialize(),
                     function(data){
                         if(data.code == -1){
@@ -68,7 +68,7 @@
                             time: 2000
                         }, function(){
                             layer.close(index);
-                            parent.window.location.href = "<%=request.getContextPath()%>/resource/toList";
+                            parent.window.location.href = "<%=request.getContextPath()%>/auth/resource/toList";
                         });
                     }
                 )
@@ -90,6 +90,7 @@
     <input type="text" name="pId" value="${pId}" placeholder="上级节点" id="pId"><br>
     <input type="text" name="resourceName" id="resourceName" placeholder="资源名称"><br />
     <input type="text" name="url" id="url" placeholder="URL"><br />
+    <input type="text" name="resourceCode" id="resourceCode" placeholder="资源编码"><br />
     <select name="resourceType">
         <option value="1">菜单</option>
         <option value="2">按钮</option>
