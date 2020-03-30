@@ -12,6 +12,7 @@
 <script src="<%=request.getContextPath()%>/static/slideVerify/js/jq-slideVerify.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/static/jquery.validate.js"></script>
 <script src="https://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/static/md5/md5-min.js"></script>
 <html>
 <head>
     <title>登陆</title>
@@ -34,6 +35,7 @@
         <input type="text" name="userPwd1" placeholder="确认新密码"/><br>
         <input type ="submit" value="确定" >
         <input type="button" onclick="back()" value="取消">
+        <input type="hidden" name="salt" id="salt" value="${salt}">
     </form>
 
 </body>
@@ -99,8 +101,8 @@
                         layer.msg(data.msg, {icon: 5});
                         return;
                     }
-                    layer.msg(data.data.msg);
-                    $("#verify").val(data.data.ver);
+                    layer.msg(data.msg);
+                    $("#verify").val(data.data);
                 }
             )
         }
@@ -195,7 +197,6 @@
             var pwd = md5($("#pwd").val());
             var salt = $("#salt").val();
             var md5pwd = md5(pwd + salt);
-            alert("进入方法")
             $("#pwd").val(md5pwd);
             $.post("<%=request.getContextPath()%>/auth/user/updatePwd",
                 $("#fm").serialize(),

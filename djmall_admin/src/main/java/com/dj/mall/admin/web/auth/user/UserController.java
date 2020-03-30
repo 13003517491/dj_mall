@@ -123,11 +123,11 @@ public class UserController {
         //获取查到的数据
         UserDTOResp userDTOResp = userApi.getUserByPhoneAndCode(userVOReq.getPhone(), userVOReq.getCode());
         //判断数据库中是否存在此条数据
-        Assert.isNull(userDTOResp, SystemConstant.NOT_CODE);
+        Assert.notNull(userDTOResp, SystemConstant.NOT_CODE);
         //验证码已失效
-        Assert.isTrue(System.currentTimeMillis() > userDTOResp.getCodeTime().getTime(), SystemConstant.FALSE_CODE);
+        Assert.state(System.currentTimeMillis() < userDTOResp.getCodeTime().getTime(), SystemConstant.FALSE_CODE);
         //删除过的用户提示用户已删除
-        Assert.isTrue(!userDTOResp.getIsDel().equals(SystemConstant.NOT_DEL), SystemConstant.DEL);
+        Assert.state(userDTOResp.getIsDel().equals(SystemConstant.NOT_DEL), SystemConstant.DEL);
         //存进新的密码和盐
         userApi.updateSaltAndPwdByPhone(DozerUtil.map(userVOReq, UserDTOReq.class));
         //发送邮件

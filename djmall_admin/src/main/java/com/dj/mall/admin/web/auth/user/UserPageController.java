@@ -69,7 +69,9 @@ public class UserPageController {
      * 去重置密码
      */
     @RequestMapping("toResetPwd")
-    private String toResetPwd() {
+    private String toResetPwd(Model model) throws Exception {
+        String salt = PasswordSecurityUtil.generateSalt();
+        model.addAttribute("salt", salt);
         return "user/user_reset_pwd";
     }
 
