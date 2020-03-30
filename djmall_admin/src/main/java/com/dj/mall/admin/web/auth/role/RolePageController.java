@@ -1,7 +1,9 @@
 package com.dj.mall.admin.web.auth.role;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.dj.mall.api.auth.role.RoleApi;
+import com.dj.mall.model.constant.SystemConstant;
 import com.dj.mall.model.dto.auth.role.RoleDTOResp;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,5 +45,18 @@ public class RolePageController {
         RoleDTOResp roleDTOResp = roleApi.getRoleById(id);
         model.addAttribute("role", roleDTOResp);
         return "role/role_update";
+    }
+
+    /**
+     * 去关联资源数据
+     *
+     * @param roleId
+     * @param model
+     * @return
+     */
+    @RequestMapping("toRoleResList")
+    public String toResource(Integer roleId, Model model) {
+        model.addAttribute("roleId", roleId);
+        return "role/role_res_list";
     }
 }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.dj.mall.admin.vo.auth.resource.ResourceVOReq;
 import com.dj.mall.admin.vo.auth.resource.ResourceVOResp;
 import com.dj.mall.api.auth.resource.ResourceApi;
+import com.dj.mall.api.auth.role.RoleApi;
 import com.dj.mall.entity.auth.resource.ResourceEntity;
 import com.dj.mall.model.base.ResultModel;
 import com.dj.mall.model.constant.SystemConstant;
@@ -13,6 +14,7 @@ import com.dj.mall.model.dto.auth.resource.ResourceDTOReq;
 import com.dj.mall.model.dto.auth.resource.ResourceDTOResp;
 import com.dj.mall.model.dto.auth.user.UserDTOResp;
 import com.dj.mall.model.util.DozerUtil;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -87,5 +89,7 @@ public class ResourceController {
         resourceApi.delResAndRoleResByIds(id);
         return new ResultModel<>().success();
     }
+
+
 
 }

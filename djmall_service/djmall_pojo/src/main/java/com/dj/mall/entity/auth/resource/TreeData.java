@@ -1,21 +1,21 @@
-package com.dj.mall.admin.vo.auth.resource;
+package com.dj.mall.entity.auth.resource;
 
 import lombok.Data;
 
 import java.io.Serializable;
 
 /**
- * @描述  资源 VO Req 对象
+ * @描述 资源树
  * @创建人 zhangjq
- * @创建时间 2020/3/28
+ * @创建时间 2020/3/30
  */
 @Data
-public class ResourceVOReq implements Serializable {
+public class TreeData implements Serializable {
 
     /**
      * 资源id
      */
-    private Integer resourceId;
+    private Integer id;
 
     /**
      * 资源名称
@@ -42,4 +42,8 @@ public class ResourceVOReq implements Serializable {
      */
     private Integer resourceType;
 
+    /**
+     * 是否开启复选框
+     */
+    private Boolean checked = false;
 }

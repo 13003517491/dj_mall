@@ -55,4 +55,5 @@ public interface ResourceApi {
      * @throws Exception
      */
     void delResAndRoleResByIds(Integer id) throws Exception;
+
 }

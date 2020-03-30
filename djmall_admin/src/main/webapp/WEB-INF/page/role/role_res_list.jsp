@@ -57,7 +57,7 @@
 
     $(function () {
         $.get(
-            "<%=request.getContextPath()%>/role/roleResources/${roleId}",
+            "<%=request.getContextPath()%>/auth/role/roleResources/${roleId}",
             function (result) {
                 treeObj = $.fn.zTree.init($("#tree"), setting, result.data);
             }
@@ -76,7 +76,7 @@
         resourceIds = resourceIds.substring(1);
 
         $.post(
-            "<%=request.getContextPath()%>/role/saveUpdateRole/${roleId}",
+            "<%=request.getContextPath()%>/auth/role/saveUpdateRole/${roleId}",
             {"resourceIds": resourceIds},
             function (data) {
 

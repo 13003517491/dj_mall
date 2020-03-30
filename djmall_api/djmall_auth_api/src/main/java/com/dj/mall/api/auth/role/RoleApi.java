@@ -1,5 +1,6 @@
 package com.dj.mall.api.auth.role;
 
+import com.dj.mall.model.dto.auth.resource.ResourceDTOResp;
 import com.dj.mall.model.dto.auth.role.RoleDTOReq;
 import com.dj.mall.model.dto.auth.role.RoleDTOResp;
 
@@ -53,4 +54,20 @@ public interface RoleApi {
      * @throws Exception
      */
     void delroleResAndUserRoleAndUserById(Integer id) throws Exception;
+
+    /**
+     * 根据角色id获取对应资源
+     * @param roleId 角色id
+     * @return
+     * @throws Exception
+     */
+    List<ResourceDTOResp> getRoleResource(Integer roleId) throws Exception;
+
+    /**
+     * 保存关联资源
+     * @param roleId 角色id
+     * @param resourceIds 资源id数组
+     * @throws Exception
+     */
+    void saveRoleResource(Integer roleId, Integer[] resourceIds) throws Exception;
 }

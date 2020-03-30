@@ -6,11 +6,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dj.mall.api.auth.role.RoleApi;
+import com.dj.mall.entity.auth.resource.ResourceEntity;
 import com.dj.mall.entity.auth.role.RoleEntity;
 import com.dj.mall.entity.auth.role.RoleResourceEntity;
 import com.dj.mall.entity.auth.user.UserRoleEntity;
 import com.dj.mall.mapper.auth.role.RoleMapper;
 import com.dj.mall.model.constant.SystemConstant;
+import com.dj.mall.model.dto.auth.resource.ResourceDTOResp;
 import com.dj.mall.model.dto.auth.role.RoleDTOReq;
 import com.dj.mall.model.dto.auth.role.RoleDTOResp;
 import com.dj.mall.model.util.DozerUtil;
@@ -18,6 +20,7 @@ import com.dj.mall.pro.auth.service.role.RoleResourceService;
 import com.dj.mall.pro.auth.service.user.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -123,5 +126,43 @@ public class RoleApiImpl extends ServiceImpl<RoleMapper, RoleEntity> implements 
         updateWrapper3.set("is_del", SystemConstant.NOT_SHOW);
         updateWrapper3.eq("id", id);
         this.update(updateWrapper3);
+    }
+
+    /**
+     * 根据角色id获取对应资源
+     *
+     * @param roleId 角色id
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public List<ResourceDTOResp> getRoleResource(Integer roleId) throws Exception {
+        List<ResourceEntity> resourceList = getBaseMapper().getRoleResourceByRoleId(roleId);
+        return DozerUtil.mapList(resourceList, ResourceDTOResp.class);
+    }
+
+    /**
+     * 保存关联资源
+     *
+     * @param roleId      角色id
+     * @param resourceIds 资源id数组
+     * @throws Exception
+     */
+    @Override
+    public void saveRoleResource(Integer roleId, Integer[] resourceIds) throws Exception {
+        //先删
+        QueryWrapper<RoleResourceEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("role_id", roleId);
+        roleResourceService.remove(queryWrapper);
+        //遍历数组 新增
+        List<RoleResourceEntity> roleResourcelist = new ArrayList<>();
+        for (Integer resourceId : resourceIds) {
+            RoleResourceEntity roleResource = new RoleResourceEntity();
+            roleResource.setRoleId(roleId);
+            roleResource.setResourceId(resourceId);
+            roleResource.setIsDel(SystemConstant.NOT_DEL);
+            roleResourcelist.add(roleResource);
+        }
+        roleResourceService.saveBatch(roleResourcelist);
     }
 }

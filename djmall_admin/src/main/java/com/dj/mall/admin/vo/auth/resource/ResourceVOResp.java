@@ -42,8 +42,4 @@ public class ResourceVOResp implements Serializable {
      */
     private Integer resourceType;
 
-    /**
-     * 是否开启复选框
-     */
-    private Boolean checked = false;
 }
