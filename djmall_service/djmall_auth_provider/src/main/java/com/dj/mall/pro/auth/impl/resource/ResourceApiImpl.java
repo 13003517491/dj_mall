@@ -79,7 +79,8 @@ public class ResourceApiImpl extends ServiceImpl<ResourceMapper, ResourceEntity>
     @Override
     public void updateResourceById(ResourceDTOReq resourceDTOReq) throws Exception {
         UpdateWrapper<ResourceEntity> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.set("resource_name", resourceDTOReq.getResourceName()).set("url", resourceDTOReq.getUrl());
+        updateWrapper.set("resource_name", resourceDTOReq.getResourceName())
+                     .set("url", resourceDTOReq.getUrl());
         updateWrapper.eq("id", resourceDTOReq.getResourceId());
         this.update(updateWrapper);
     }

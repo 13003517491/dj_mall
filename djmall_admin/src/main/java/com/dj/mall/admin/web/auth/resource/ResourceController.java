@@ -60,31 +60,32 @@ public class ResourceController {
         return new ResultModel<>().success(resourceDTORespList);
     }
 
-//    /**
-//     * 资源名去重
-//     */
-//    @RequestMapping("findByResourceName")
-//    public Boolean findByRoleName(String resourceName) throws Exception{
-//        resourceApi.distinct(resourceName);
-//        return true;
-//    }
-//
-//    /**
-//     * 资源修改
-//     */
-//    @RequestMapping("update")
-//    public ResultModel<Object> update(ResourceVOReq resourceVOReq) throws Exception {
-//        resourceApi.updateResourceById(DozerUtil.map(resourceVOReq, ResourceDTOReq.class));
-//        return new ResultModel<>().success();
-//    }
-//
-//    /**
-//     * 资源删除
-//     */
-//    @RequestMapping("delById")
-//    public ResultModel<Object> delById(Integer id) throws Exception {
-//        resourceApi.delResAndRoleResByIds(id);
-//        return new ResultModel<>().success();
-//    }
+    /**
+     * 资源名去重
+     */
+    @RequestMapping("findByResourceName")
+    public Boolean findByRoleName(String resourceName) throws Exception{
+        resourceApi.distinct(resourceName);
+        return true;
+    }
+
+
+    /**
+     * 资源修改
+     */
+    @RequestMapping("update")
+    public ResultModel<Object> update(ResourceVOReq resourceVOReq) throws Exception {
+        resourceApi.updateResourceById(DozerUtil.map(resourceVOReq, ResourceDTOReq.class));
+        return new ResultModel<>().success();
+    }
+
+    /**
+     * 资源删除
+     */
+    @RequestMapping("delById")
+    public ResultModel<Object> delById(Integer id) throws Exception {
+        resourceApi.delResAndRoleResByIds(id);
+        return new ResultModel<>().success();
+    }
 
 }

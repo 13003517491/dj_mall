@@ -93,7 +93,7 @@
                 layer.msg("只能选择一个节点操作");
                 return false;
             }
-            var value = selectNode[0].id;
+            var value = selectNode[0].resourceId;
             layer.open({
                 type: 2,
                 titel: "修改",
@@ -120,7 +120,7 @@
                 ids = getChildNode(selectNode);
             }
             ids += selectNode.id;
-            var id = selectNode[0].id;
+            var id = selectNode[0].resourceId;
 
             layer.msg('确定删除?', {
                 time: 0 //不自动关闭

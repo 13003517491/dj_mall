@@ -1,10 +1,9 @@
 package com.dj.mall.admin.web.auth.resource;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.dj.mall.api.auth.resource.ResourceApi;
-import jdk.nashorn.internal.ir.annotations.Reference;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -21,6 +20,19 @@ public class ResourcePageController {
         return "resource/resource_list";
     }
 
+    /**
+     * 去修改页面
+     * @param resourceId 资源id
+     * @param model 存放
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("toUpdate")
+    public String toUpdate(Integer resourceId, Model model) throws Exception {
+        model.addAttribute("resource", resourceApi.getResourceById(resourceId));
+        return "resource/resource_update";
+    }
+
 //    /**
 //     * 去新增
 //     */
@@ -30,12 +42,5 @@ public class ResourcePageController {
 //        return "resource/resource_add";
 //    }
 //
-//    /**
-//     * 去修改页面
-//     */
-//    @RequestMapping("toUpdate")
-//    public String toUpdate(Integer resourceId, Model model) throws Exception {
-//        model.addAttribute("resource", resourceApi.getResourceById(resourceId));
-//        return "resource/resource_update";
-//    }
+
 }
