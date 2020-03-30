@@ -104,9 +104,27 @@
 
         function deleRes() {
             // 获取选中的节点
+            // var treeObj = $.fn.zTree.getZTreeObj("tree");
+            // var selectNode = treeObj.getSelectedNodes()[0];
+            // if (selectNode == null) {
+            //     layer.msg("至少选择一个节点操作");
+            //     return false;
+            // }
+            // if (selectNode.length > 1) {
+            //     layer.msg("只能选择一个节点操作");
+            //     return false;
+            // }
+            // // 如果当前选中的节点是 父节点 要获取全部的后代节点信息
+            // var ids = "";
+            // if (selectNode.isParent) {
+            //     ids = getChildNode(selectNode);
+            // }
+            // ids += selectNode.id;
+            // var id = selectNode[0].resourceId;
+            // alert(id)
             var treeObj = $.fn.zTree.getZTreeObj("tree");
-            var selectNode = treeObj.getSelectedNodes()[0];
-            if (selectNode == null) {
+            var selectNode = treeObj.getSelectedNodes();
+            if (selectNode.length <= 0) {
                 layer.msg("至少选择一个节点操作");
                 return false;
             }
@@ -114,34 +132,48 @@
                 layer.msg("只能选择一个节点操作");
                 return false;
             }
-            // 如果当前选中的节点是 父节点 要获取全部的后代节点信息
-            var ids = "";
-            if (selectNode.isParent) {
-                ids = getChildNode(selectNode);
-            }
-            ids += selectNode.id;
-            var id = selectNode[0].resourceId;
+            var value = selectNode[0].resourceId;
+            alert(value)
 
-            layer.msg('确定删除?', {
-                time: 0 //不自动关闭
-                , btn: ['确定', '取消']
-                , yes: function () {
-                    $.post(
-                        "<%=request.getContextPath() %>/auth/resource/delById",
-                        {"id": id},
-                        function (data) {
-                            if (data.code == 200) {
-                                layer.msg(data.msg, {
-                                    icon: 6,
-                                }, function () {
-                                    window.location.href = "<%=request.getContextPath()%>/auth/resource/toList";
-                                });
-                            } else {
-                                layer.msg(data.msg, {icon: 5});
-                            }
-                        })
-                }
-            })
+
+            layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
+                //do something
+                var index = layer.load(1,{shade:0.5});
+                $.post(
+                    "<%=request.getContextPath()%>/auth/resource/delById",
+                    {"id": value},
+                    function(data){
+                        if (data.code != -1) {
+                            layer.msg(data.msg, {icon: 6}, function(){
+                                window.location.href = "<%=request.getContextPath()%>/auth/resource/toList";
+                            });
+                            return;
+                        }
+                        layer.msg(data.msg, {icon: 5})
+                        layer.close(index);
+                    }
+                )
+            });
+            <%--layer.msg('确定删除?', {--%>
+            <%--    time: 0 //不自动关闭--%>
+            <%--    , btn: ['确定', '取消']--%>
+            <%--    , yes: function () {--%>
+            <%--        $.post(--%>
+            <%--            "<%=request.getContextPath() %>/auth/resource/delById",--%>
+            <%--            {"id": value},--%>
+            <%--            function (data) {--%>
+            <%--                if (data.code == 200) {--%>
+            <%--                    layer.msg(data.msg, {--%>
+            <%--                        icon: 6,--%>
+            <%--                    }, function () {--%>
+            <%--                        window.location.href = "<%=request.getContextPath()%>/auth/resource/toList";--%>
+            <%--                    });--%>
+            <%--                } else {--%>
+            <%--                    layer.msg(data.msg, {icon: 5});--%>
+            <%--                }--%>
+            <%--            })--%>
+            <%--    }--%>
+            <%--})--%>
         }
 
         //递归自我调用
