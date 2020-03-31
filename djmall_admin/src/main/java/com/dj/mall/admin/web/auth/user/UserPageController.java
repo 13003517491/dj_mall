@@ -1,17 +1,14 @@
 package com.dj.mall.admin.web.auth.user;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.dj.mall.admin.vo.PermissionCode;
 import com.dj.mall.admin.vo.auth.role.RoleVOResp;
 import com.dj.mall.api.auth.role.RoleApi;
 import com.dj.mall.api.auth.user.UserApi;
-import com.dj.mall.entity.auth.user.UserRoleEntity;
-import com.dj.mall.model.constant.SystemConstant;
 import com.dj.mall.model.dto.auth.role.RoleDTOResp;
-import com.dj.mall.model.dto.auth.user.UserDTOResp;
 import com.dj.mall.model.util.DozerUtil;
 import com.dj.mall.model.util.PasswordSecurityUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,8 +45,7 @@ public class UserPageController {
      */
     @RequestMapping("toAdd")
     private String toAdd(Model model) throws Exception {
-        String salt = PasswordSecurityUtil.generateSalt();
-        model.addAttribute("salt", salt);
+        model.addAttribute("salt", PasswordSecurityUtil.generateSalt());
         model.addAttribute("roleList", DozerUtil.mapList(roleApi.getRole(), RoleVOResp.class));
         return "user/user_add";
     }
@@ -66,12 +62,11 @@ public class UserPageController {
     }
 
     /**
-     * 去重置密码
+     * 去修改密码
      */
     @RequestMapping("toResetPwd")
     private String toResetPwd(Model model) throws Exception {
-        String salt = PasswordSecurityUtil.generateSalt();
-        model.addAttribute("salt", salt);
+        model.addAttribute("salt", PasswordSecurityUtil.generateSalt());
         return "user/user_reset_pwd";
     }
 
@@ -80,8 +75,10 @@ public class UserPageController {
      * 去用户展示页面
      */
     @RequestMapping("toList")
+//    @RequiresPermissions(value = PermissionCode.USER_MANAGER)
     private String toList1(Model model) throws Exception {
-        model.addAttribute("roleList", DozerUtil.mapList(roleApi.getRole(), RoleVOResp.class));
+        List<RoleDTOResp> roleList = roleApi.getRole();
+        model.addAttribute("roleList", roleList);
         return "user/user_list";
     }
 
@@ -90,8 +87,7 @@ public class UserPageController {
      */
     @RequestMapping("toUpdate/{id}")
     public String toUpdate(@PathVariable Integer id, Model model) throws Exception {
-        UserDTOResp userDTOResp = userApi.getUserById(id);
-        model.addAttribute("user", userDTOResp);
+        model.addAttribute("user", userApi.getUserById(id));
         return "user/user_update";
     }
 
@@ -100,10 +96,8 @@ public class UserPageController {
      */
     @RequestMapping("toUpdateRole/{id}")
     public String toUpdateRole(@PathVariable Integer id, Model model) throws Exception {
-        UserRoleEntity userRole = userApi.getUserRole(id);
-        List<RoleDTOResp> roleList = roleApi.getRole();
-        model.addAttribute("userRole", userRole);
-        model.addAttribute("roleList", roleList);
+        model.addAttribute("userRole", userApi.getUserRole(id));
+        model.addAttribute("roleList", roleApi.getRole());
         return "user/user_update_role";
     }
 

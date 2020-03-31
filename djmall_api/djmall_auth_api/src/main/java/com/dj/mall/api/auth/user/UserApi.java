@@ -1,10 +1,7 @@
 package com.dj.mall.api.auth.user;
 
-import com.dj.mall.entity.auth.role.RoleEntity;
 import com.dj.mall.entity.auth.user.UserRoleEntity;
 import com.dj.mall.model.base.BusinessException;
-import com.dj.mall.model.base.ResultModel;
-import com.dj.mall.model.dto.auth.role.RoleDTOResp;
 import com.dj.mall.model.dto.auth.user.UserDTOReq;
 import com.dj.mall.model.dto.auth.user.UserDTOResp;
 
@@ -130,4 +127,11 @@ public interface UserApi {
      * @param ids 用户id
      */
     void delUserAndUserRoleByIds(Integer[] ids) throws Exception;
+
+
+    /**
+     * 重置密码
+     * @param id 用户id
+     */
+    void updatePasswordById(Integer id) throws Exception;
 }

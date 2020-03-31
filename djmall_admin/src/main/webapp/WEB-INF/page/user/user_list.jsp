@@ -205,6 +205,40 @@
                     }
                 )
             });
+            layer.close(index);
+        }
+
+
+        //删除
+        function updatePasswordById(){
+            var length = $("input[name='id']:checked").length;
+
+            if(length <= 0){
+                alert("至少选择一项");
+                return;
+            }
+            if(length > 1){
+                alert("只能选择一个");
+                return;
+            }
+
+            var id = $("input[name='id']:checked").val();
+            var index = layer.load(1,{shade:0.5});
+                //do something
+                $.post(
+                    "<%=request.getContextPath()%>/auth/user/updatePasswordById",
+                    {"id": id},
+                    function(data){
+                        if (data.code != -1) {
+                            layer.msg(data.msg, {icon: 6}, function(){
+                                window.location.href = "<%=request.getContextPath()%>/auth/user/toList";
+                            });
+                            return;
+                        }
+                        layer.msg(data.msg, {icon: 5})
+                        layer.close(index);
+                    }
+                )
         }
     </script>
 </head>
@@ -225,16 +259,19 @@
     </select>
     <input type="button" value="查询" onclick="search()"><br />
 </form>
-    <shiro:hasPermission name="user:update">
+    <shiro:hasPermission name="USER_UPDATE">
         <input type="button" value="修改" onclick="updateById()">&nbsp;&nbsp;
     </shiro:hasPermission>
-    <shiro:hasPermission name="user:updateStatus">
+    <shiro:hasPermission name="USER_ACTIVE">
         <input type="button" value="激活" onclick="updateStatusById()">&nbsp;&nbsp;
     </shiro:hasPermission>
-    <shiro:hasPermission name="user:del">
+    <shiro:hasPermission name="USER_RESETPWD">
+        <input type="button" value="重置密码" onclick="updatePasswordById()">&nbsp;&nbsp;
+    </shiro:hasPermission>
+    <shiro:hasPermission name="USER_DEL">
         <input type="button" value="删除" onclick="delByIds()">&nbsp;
     </shiro:hasPermission>
-    <shiro:hasPermission name="user:addUserRole">
+    <shiro:hasPermission name="USER_AUTH">
         <input type="button" value="授权" onclick="updateUserRoleById()">
     </shiro:hasPermission>
 

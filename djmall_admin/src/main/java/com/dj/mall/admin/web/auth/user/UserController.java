@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.dj.mall.admin.vo.auth.user.UserVOReq;
 import com.dj.mall.admin.vo.auth.user.UserVOResp;
+import com.dj.mall.api.auth.resource.ResourceApi;
 import com.dj.mall.api.auth.user.UserApi;
 import com.dj.mall.entity.auth.user.UserEntity;
 import com.dj.mall.model.base.BusinessException;
@@ -16,8 +17,10 @@ import com.dj.mall.model.util.JavaEmailUtils;
 import com.dj.mall.model.util.MessageVerifyUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.DateFormat;
@@ -37,6 +40,9 @@ public class UserController {
     @Reference
     private UserApi userApi;
 
+    @Reference
+    private ResourceApi resourceApi;
+
     /**
      * 登录
      * @param userVOReq 用户接收对象
@@ -47,6 +53,10 @@ public class UserController {
     public ResultModel<Object> login(UserVOReq userVOReq) throws Exception {
             Assert.hasText(userVOReq.getUsername(), SystemConstant.LOGIN_VERIFY);
             Assert.hasText(userVOReq.getPassword(), SystemConstant.LOGIN_VERIFY);
+            UserDTOResp userDTOResp = userApi.getUser(DozerUtil.map(userVOReq, UserDTOReq.class));
+            userDTOResp.setPermissionList(resourceApi.getUserResourceList(userDTOResp.getUserId()));
+            Session session = SecurityUtils.getSubject().getSession();
+            session.setAttribute("userEntity", userDTOResp);
             //shiro 登录方式
             Subject subject = SecurityUtils.getSubject();
             UsernamePasswordToken token = new UsernamePasswordToken(userVOReq.getUsername(), userVOReq.getPassword());
@@ -160,8 +170,8 @@ public class UserController {
 
     /**
      * 修改用户角色
-     * @param userId
-     * @param roleId
+     * @param userId 用户id
+     * @param roleId 角色id
      * @return
      */
     @RequestMapping("updateUserRole")
@@ -172,7 +182,7 @@ public class UserController {
 
     /**
      * 用户激活
-     * @param id
+     * @param id 用户id
      * @return
      */
     @RequestMapping("updateStatusById")
@@ -187,12 +197,23 @@ public class UserController {
 
     /**
      * 批量伪删除
-     * @param ids 用户id
+     * @param ids 用户id数组
      * @return
      */
     @RequestMapping("delByIds")
     public ResultModel<Object> delByIds(Integer[] ids) throws Exception {
         userApi.delUserAndUserRoleByIds(ids);
+        return new ResultModel<>().success();
+    }
+
+    /**
+     * 重置密码
+     * @param id 用户id
+     * @return
+     */
+    @RequestMapping("updatePasswordById")
+    public ResultModel<Object> updatePasswordById(Integer id) throws Exception {
+        userApi.updatePasswordById(id);
         return new ResultModel<>().success();
     }
 

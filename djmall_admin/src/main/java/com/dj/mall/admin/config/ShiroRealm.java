@@ -47,7 +47,7 @@ public class ShiroRealm extends AuthorizingRealm {
         Session session = SecurityUtils.getSubject().getSession();
         UserDTOResp userDTOResp = (UserDTOResp) session.getAttribute("userEntity");
         for (ResourceDTOResp resourceEntity : userDTOResp.getPermissionList()) {
-            simpleAuthorizationInfo.addStringPermission(resourceEntity.getUrl());
+            simpleAuthorizationInfo.addStringPermission(resourceEntity.getResourceCode());
         }
         return simpleAuthorizationInfo;
     }
@@ -60,27 +60,11 @@ public class ShiroRealm extends AuthorizingRealm {
      */
     @SneakyThrows
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException, BusinessException {
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException{
         // 得到用户名
         String username = (String) authenticationToken.getPrincipal();
         // 得到密码
         String password = new String((char[]) authenticationToken.getCredentials());
-        UserDTOReq userDTOReq = new UserDTOReq();
-        userDTOReq.setPassword(password);
-        userDTOReq.setUsername(username);
-        UserDTOResp userDTOResp = userApi.getUser(userDTOReq);
-//            if (null == userDTOResp) {
-//                throw new AccountException(SystemConstant.LOGIN_ERROR);
-//            }
-//            if (!userDTOResp.getIsDel().equals(SystemConstant.NOT_DEL)) {
-//                throw new UnknownAccountException(SystemConstant.DEL);
-//            }
-//            if (userDTOResp.getStatus() != 1) {
-//                throw new LockedAccountException(SystemConstant.NOT_ACTIVE);
-//            }
-        userDTOResp.setPermissionList(resourceApi.getUserResourceList(userDTOResp.getUserId()));
-        Session session = SecurityUtils.getSubject().getSession();
-        session.setAttribute("userEntity", userDTOResp);
         return new SimpleAuthenticationInfo(username, password, getName());
     }
 }

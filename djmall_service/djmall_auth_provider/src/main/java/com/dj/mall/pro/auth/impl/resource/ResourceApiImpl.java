@@ -142,4 +142,5 @@ public class ResourceApiImpl extends ServiceImpl<ResourceMapper, ResourceEntity>
         resourceDTOReq.setResourceCode(resourceDTOReq.getResourceCode().toUpperCase());
         this.save(DozerUtil.map(resourceDTOReq, ResourceEntity.class));
     }
+
 }

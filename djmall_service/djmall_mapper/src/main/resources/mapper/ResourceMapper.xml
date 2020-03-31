@@ -9,7 +9,8 @@
             res.url,
             res.p_id,
             res.is_del,
-            res.resource_type
+            res.resource_type,
+            res.resource_code
         from
             djmall_auth_user u
         LEFT JOIN djmall_auth_user_role ur ON u.id = ur.user_id

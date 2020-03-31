@@ -18,10 +18,13 @@ import com.dj.mall.model.dto.auth.role.RoleDTOResp;
 import com.dj.mall.model.dto.auth.user.UserDTOReq;
 import com.dj.mall.model.dto.auth.user.UserDTOResp;
 import com.dj.mall.model.util.DozerUtil;
+import com.dj.mall.model.util.JavaEmailUtils;
+import com.dj.mall.model.util.PasswordSecurityUtil;
 import com.dj.mall.pro.auth.service.user.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -58,6 +61,10 @@ public class UserApiImpl extends ServiceImpl<UserMapper, UserEntity> implements 
 
         if (null == userEntity) {
             throw new BusinessException(SystemConstant.LOGIN_ERROR);
+        }
+        if (StringUtils.isEmpty(userEntity.getResetPassword()) &&
+                userDTOReq.getPassword().equals(userEntity.getResetPassword())) {
+            throw new BusinessException((SystemConstant.RESET_PWD));
         }
         if (!userEntity.getIsDel().equals(SystemConstant.NOT_DEL)) {
             throw new BusinessException(SystemConstant.DEL);
@@ -125,10 +132,11 @@ public class UserApiImpl extends ServiceImpl<UserMapper, UserEntity> implements 
      */
     @Override
     public void saveUser(UserDTOReq userDTOReq) throws Exception {
-        this.save(DozerUtil.map(userDTOReq, UserEntity.class));
+        UserEntity user = DozerUtil.map(userDTOReq, UserEntity.class);
+        this.save(user);
         UserRoleEntity userRoleEntity = new UserRoleEntity();
         userRoleEntity.setRoleId(userDTOReq.getRoleId());
-        userRoleEntity.setUserId(userDTOReq.getUserId());
+        userRoleEntity.setUserId(user.getId());
         userRoleService.save(userRoleEntity);
     }
 
@@ -309,4 +317,36 @@ public class UserApiImpl extends ServiceImpl<UserMapper, UserEntity> implements 
         updateWrapper1.in("user_id", ids);
         userRoleService.update(updateWrapper1);
     }
+
+    /**
+     * 重置密码
+     *
+     * @param id 用户id
+     */
+    @Override
+    public void updatePasswordById(Integer id) throws Exception {
+        String resetPassword = PasswordSecurityUtil.generateRandom(6);
+        String salt = PasswordSecurityUtil.generateSalt();
+        String md5Pwd = PasswordSecurityUtil.enCode32(resetPassword);
+        String md5ResetPwd = PasswordSecurityUtil.enCode32(md5Pwd + salt);
+        System.out.println("初始密码 = " + resetPassword);
+        System.out.println("盐 = " + salt);
+        System.out.println("初始密码mds加密 = " + md5Pwd);
+        System.out.println("md5加密(初始密码mds加密+盐) = " + md5ResetPwd);
+        UpdateWrapper<UserEntity> updateWrapper = new UpdateWrapper();
+        updateWrapper.set("password", md5ResetPwd)
+                     .set("reset_password", md5ResetPwd)
+                     .set("salt", salt);
+        updateWrapper.eq("id", id);
+        this.update(updateWrapper);
+        UserEntity user = this.getById(id);
+        //发送邮件
+        DateFormat df = DateFormat.getDateTimeInstance();
+        JavaEmailUtils.sendEmail(user.getEmail(), "重置密码",
+                "您的密码已被管理员于"+df.format(new Date())+"时重置为"+resetPassword+".为了您的账户安全，请及时修改。</br>" +
+                        "<a href='http://localhost:8081/admin/auth/user/toLogin'>点我去登陆</a><br>"
+                        );
+    }
+
+    
 }

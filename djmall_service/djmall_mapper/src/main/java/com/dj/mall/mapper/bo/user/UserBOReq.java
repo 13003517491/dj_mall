@@ -100,4 +100,9 @@ public class UserBOReq implements Serializable {
      * 角色展示
      */
     private String roleShow;
+
+    /**
+     * 重置密码
+     */
+    private String resetPassword;
 }

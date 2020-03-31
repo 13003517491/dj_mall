@@ -53,6 +53,7 @@
             and u.is_del = 1
             and ur.is_del = 1
             and r.is_del = 1
+            order by u.id desc
         </where>
     </select>
 </mapper>

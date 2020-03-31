@@ -133,7 +133,6 @@
                 return false;
             }
             var value = selectNode[0].resourceId;
-            alert(value)
 
 
             layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
@@ -195,13 +194,13 @@
 </head>
 <body>
 <%--<input type="button" value="新增一级资源" onclick="saveOne()">--%>
-    <shiro:hasPermission name="resource:add">
+    <shiro:hasPermission name="RESOURCE_ADD">
         <input type="button" value="新增" onclick="saveTwo()">
     </shiro:hasPermission>
-    <shiro:hasPermission name="resource:update">
+    <shiro:hasPermission name="RESOURCE_UPDATE">
         <input type="button" value="修改" onclick="updateRes()">
     </shiro:hasPermission>
-    <shiro:hasPermission name="resource:del">
+    <shiro:hasPermission name="RESOURCE_DEL">
         <input type="button" value="删除" onclick="deleRes()">
     </shiro:hasPermission>
 

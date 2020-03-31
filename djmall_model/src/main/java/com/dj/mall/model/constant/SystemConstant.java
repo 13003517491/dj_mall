@@ -71,4 +71,9 @@ public class SystemConstant {
 	 * 正常展示
 	 */
 	public static final Integer NOT_DEL = 1;
+
+	/**
+	 * 已重置密码，请修改
+	 */
+    public static final String RESET_PWD = "已重置密码，请修改";
 }

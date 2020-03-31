@@ -108,4 +108,9 @@ public class UserDTOResp implements Serializable {
      */
     private List<ResourceDTOResp> permissionList;
 
+    /**
+     * 重置密码
+     */
+    private String resetPassword;
+
 }

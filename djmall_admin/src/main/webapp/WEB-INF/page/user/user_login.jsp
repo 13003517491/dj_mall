@@ -23,6 +23,10 @@
             var pwd = md5($("#pwd").val());
             var salt = $("#salt").val();
             var md5pwd = md5(pwd + salt);
+            alert($("#pwd").val())
+            alert(salt);
+            alert(pwd);
+            alert(md5pwd)
             $("#pwd").val(md5pwd);
             $.post(
                 "<%=request.getContextPath()%>/auth/user/login",

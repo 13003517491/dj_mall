@@ -2,9 +2,11 @@ package com.dj.mall.admin.web.auth.role;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.dj.mall.admin.vo.PermissionCode;
 import com.dj.mall.api.auth.role.RoleApi;
 import com.dj.mall.model.constant.SystemConstant;
 import com.dj.mall.model.dto.auth.role.RoleDTOResp;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +27,7 @@ public class RolePageController {
      * 去展示
      */
     @RequestMapping("toList")
+    @RequiresPermissions(value = PermissionCode.ROLE_MANAGER)
     public String toList() {
         return "role/role_list";
     }
