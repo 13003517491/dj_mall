@@ -62,7 +62,7 @@ public class UserApiImpl extends ServiceImpl<UserMapper, UserEntity> implements 
         if (null == userEntity) {
             throw new BusinessException(SystemConstant.LOGIN_ERROR);
         }
-        if (StringUtils.isEmpty(userEntity.getResetPassword()) &&
+        if (!StringUtils.isEmpty(userEntity.getResetPassword()) &&
                 userDTOReq.getPassword().equals(userEntity.getResetPassword())) {
             throw new BusinessException((SystemConstant.RESET_PWD));
         }
