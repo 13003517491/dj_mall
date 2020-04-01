@@ -134,4 +134,11 @@ public interface UserApi {
      * @param id 用户id
      */
     void updatePasswordById(Integer id) throws Exception;
+
+    /**
+     * 修改密码
+     * @param userDTOReq
+     * @throws Exception
+     */
+    void updatePasswordByUsername(UserDTOReq userDTOReq) throws Exception;
 }

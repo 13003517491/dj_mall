@@ -76,4 +76,14 @@ public class SystemConstant {
 	 * 已重置密码，请修改
 	 */
     public static final String RESET_PWD = "已重置密码，请修改";
+
+	/**
+	 * 去修改密码状态300
+	 */
+	public static final Integer UPDATE_PWD = 300;
+
+	/**
+	 * 用户登录信息
+	 */
+    public static final String USER_SESSION = "userEntity";
 }

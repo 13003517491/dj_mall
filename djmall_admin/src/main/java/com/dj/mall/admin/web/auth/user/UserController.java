@@ -56,7 +56,7 @@ public class UserController {
             UserDTOResp userDTOResp = userApi.getUser(DozerUtil.map(userVOReq, UserDTOReq.class));
             userDTOResp.setPermissionList(resourceApi.getUserResourceList(userDTOResp.getUserId()));
             Session session = SecurityUtils.getSubject().getSession();
-            session.setAttribute("userEntity", userDTOResp);
+            session.setAttribute(SystemConstant.USER_SESSION, userDTOResp);
             //shiro 登录方式
             Subject subject = SecurityUtils.getSubject();
             UsernamePasswordToken token = new UsernamePasswordToken(userVOReq.getUsername(), userVOReq.getPassword());
@@ -124,7 +124,7 @@ public class UserController {
     }
 
     /**
-     * 修改密码
+     * 忘记密码
      * @param userVOReq 用户接收对象
      * @return
      */
@@ -143,6 +143,15 @@ public class UserController {
         //发送邮件
         DateFormat df = DateFormat.getDateTimeInstance();
         JavaEmailUtils.sendEmail(userDTOResp.getEmail(), "修改密码", "您的账户"+userDTOResp.getNickname()+"，于"+df.format(new Date())+"时进行密码修改成功。");
+        return new ResultModel<>().success();
+    }
+
+    /**
+     * 修改密码
+     */
+    @RequestMapping("updatePasswordByUsername")
+    public ResultModel<Object> updatePasswordByUsername(UserVOReq userVOReq) throws Exception{
+        userApi.updatePasswordByUsername(DozerUtil.map(userVOReq, UserDTOReq.class));
         return new ResultModel<>().success();
     }
 

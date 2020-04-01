@@ -32,6 +32,15 @@
                         layer.msg(data.msg, {icon: 6}, function(){
                             window.location.href = "<%=request.getContextPath()%>/index/toIndex";
                         });
+
+                        return;
+                    }
+                    if (data.code == 300) {
+                        var username = $("#username").val();
+                        layer.msg(data.msg, {icon: 6}, function(){
+                            window.location.href = "<%=request.getContextPath()%>/auth/user/toUpdatePwd?username="+username;
+                        });
+
                         return;
                     }
                     layer.msg(data.msg, {icon: 5})
@@ -58,7 +67,7 @@
 <form id="fm">
     <input type="hidden" name="salt" id="salt">
     用户名:
-        <input type="text" name="username" placeholder="请输入用户名/手机号/邮箱" onblur="getSalt(this)" /><br />
+        <input type="text" name="username" id="username" placeholder="请输入用户名/手机号/邮箱" onblur="getSalt(this)" /><br />
     密码:
         <input type="password" name="password" placeholder="请输入密码" id="pwd"/><br />
     <a href="<%=request.getContextPath()%>/auth/user/toAdd">还没有账号?点我去注册!</a><br />

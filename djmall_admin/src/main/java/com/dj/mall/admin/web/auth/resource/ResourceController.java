@@ -41,7 +41,7 @@ public class ResourceController {
      */
     @RequestMapping("list")
     public ResultModel<Object> list(HttpSession session) {
-        UserDTOResp userDTORespList = (UserDTOResp) session.getAttribute("userEntity");
+        UserDTOResp userDTORespList = (UserDTOResp) session.getAttribute(SystemConstant.USER_SESSION);
         List<ResourceDTOResp> menuList = new ArrayList<>();
         for (ResourceDTOResp resource : userDTORespList.getPermissionList()) {
             if (resource.getResourceType().equals(SystemConstant.MENU_SHOW)) {

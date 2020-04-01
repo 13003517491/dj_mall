@@ -62,12 +62,22 @@ public class UserPageController {
     }
 
     /**
-     * 去修改密码
+     * 忘记密码
      */
     @RequestMapping("toResetPwd")
     private String toResetPwd(Model model) throws Exception {
         model.addAttribute("salt", PasswordSecurityUtil.generateSalt());
         return "user/user_reset_pwd";
+    }
+
+    /**
+     * 去修改面
+     */
+    @RequestMapping("toUpdatePwd")
+    private String toUpdatePwd(String username, Model model) throws Exception {
+        model.addAttribute("salt", PasswordSecurityUtil.generateSalt());
+        model.addAttribute("username", username);
+        return "user/user_update_pwd";
     }
 
 

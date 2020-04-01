@@ -64,7 +64,7 @@ public class UserApiImpl extends ServiceImpl<UserMapper, UserEntity> implements 
         }
         if (!StringUtils.isEmpty(userEntity.getResetPassword()) &&
                 userDTOReq.getPassword().equals(userEntity.getResetPassword())) {
-            throw new BusinessException((SystemConstant.RESET_PWD));
+            throw new BusinessException(SystemConstant.UPDATE_PWD, SystemConstant.RESET_PWD);
         }
         if (!userEntity.getIsDel().equals(SystemConstant.NOT_DEL)) {
             throw new BusinessException(SystemConstant.DEL);
@@ -348,5 +348,19 @@ public class UserApiImpl extends ServiceImpl<UserMapper, UserEntity> implements 
                         );
     }
 
-    
+
+    /**
+     * 修改密码
+     *
+     * @param userDTOReq
+     * @throws Exception
+     */
+    @Override
+    public void updatePasswordByUsername(UserDTOReq userDTOReq) throws Exception {
+        UpdateWrapper<UserEntity> updateWrapper = new UpdateWrapper();
+        updateWrapper.set("salt", userDTOReq.getSalt())
+                     .set("password", userDTOReq.getPassword());
+        updateWrapper.eq("username", userDTOReq.getUsername());
+        this.update(updateWrapper);
+    }
 }

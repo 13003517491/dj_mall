@@ -1,4 +1,5 @@
 package com.dj.mall.admin.config;
+import com.dj.mall.model.constant.SystemConstant;
 import com.dj.mall.model.dto.auth.resource.ResourceDTOResp;
 
 import com.dj.mall.model.dto.auth.user.UserDTOResp;
@@ -26,7 +27,7 @@ public class ShiroRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         //获取当前登录用户权限信息
         Session session = SecurityUtils.getSubject().getSession();
-        UserDTOResp userDTOResp = (UserDTOResp) session.getAttribute("userEntity");
+        UserDTOResp userDTOResp = (UserDTOResp) session.getAttribute(SystemConstant.USER_SESSION);
         for (ResourceDTOResp resourceEntity : userDTOResp.getPermissionList()) {
             simpleAuthorizationInfo.addStringPermission(resourceEntity.getResourceCode());
         }
