@@ -5,21 +5,19 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dj.mall.api.auth.user.UserApi;
-import com.dj.mall.entity.auth.role.RoleEntity;
+import com.dj.mall.entity.auth.record.TimeRecordEntity;
 import com.dj.mall.entity.auth.user.UserEntity;
 import com.dj.mall.entity.auth.user.UserRoleEntity;
-import com.dj.mall.mapper.auth.role.RoleMapper;
 import com.dj.mall.mapper.auth.user.UserMapper;
 import com.dj.mall.mapper.bo.user.UserBOReq;
 import com.dj.mall.model.base.BusinessException;
-import com.dj.mall.model.base.ResultModel;
 import com.dj.mall.model.constant.SystemConstant;
-import com.dj.mall.model.dto.auth.role.RoleDTOResp;
 import com.dj.mall.model.dto.auth.user.UserDTOReq;
 import com.dj.mall.model.dto.auth.user.UserDTOResp;
 import com.dj.mall.model.util.DozerUtil;
 import com.dj.mall.model.util.JavaEmailUtils;
 import com.dj.mall.model.util.PasswordSecurityUtil;
+import com.dj.mall.pro.auth.service.record.TimeRecordService;
 import com.dj.mall.pro.auth.service.user.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -40,6 +38,9 @@ public class UserApiImpl extends ServiceImpl<UserMapper, UserEntity> implements 
 
     @Autowired
     private UserRoleService userRoleService;
+
+    @Autowired
+    private TimeRecordService timeRecordService;
 
 
     /**
@@ -69,14 +70,26 @@ public class UserApiImpl extends ServiceImpl<UserMapper, UserEntity> implements 
         if (!userEntity.getIsDel().equals(SystemConstant.NOT_DEL)) {
             throw new BusinessException(SystemConstant.DEL);
         }
-        if (userEntity.getStatus() != 1) {
+        if (!userEntity.getStatus().equals(SystemConstant.ACTIVE_SUCCESS)) {
             throw new BusinessException(SystemConstant.NOT_ACTIVE);
         }
-        UpdateWrapper<UserEntity> updateWrapper = new UpdateWrapper<>();
+
         if (null != userEntity) {
-            updateWrapper.set("last_login_time", new Date());
-            updateWrapper.eq("id", userEntity.getId());
-            this.update(updateWrapper);
+            QueryWrapper<TimeRecordEntity> queryWrapper1 = new QueryWrapper();
+            queryWrapper1.eq("user_id", userEntity.getId());
+            if (timeRecordService.getOne(queryWrapper1) != null) {
+                UpdateWrapper<TimeRecordEntity> updateWrapper = new UpdateWrapper<>();
+                updateWrapper.set("last_login_time", new Date());
+                updateWrapper.eq("user_id", userEntity.getId());
+                timeRecordService.update(updateWrapper);
+            } else {
+                TimeRecordEntity timeRecordEntity = new TimeRecordEntity();
+                timeRecordEntity.setLastLoginTime(new Date());
+                timeRecordEntity.setUserId(userEntity.getId());
+                timeRecordService.save(timeRecordEntity);
+            }
+
+
         }
         return DozerUtil.map(userEntity, UserDTOResp.class);
     }
@@ -180,7 +193,7 @@ public class UserApiImpl extends ServiceImpl<UserMapper, UserEntity> implements 
         //设置起时间
         cal.setTime(new Date());
         //增加一分钟
-        cal.add(Calendar.MINUTE, 2);
+        cal.add(Calendar.MINUTE, SystemConstant.MINUTIS_CODE);
         UpdateWrapper<UserEntity> updateWrapper = new UpdateWrapper<>();
         updateWrapper.set("code_time", cal.getTime()).set("code", newcode);
         updateWrapper.eq("phone", phone);

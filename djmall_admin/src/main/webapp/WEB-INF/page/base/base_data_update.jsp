@@ -13,12 +13,12 @@
         function update (){
             var index = layer.load(1,{shade:0.5});
             $.post(
-                "<%=request.getContextPath()%>/auth/user/update",
+                "<%=request.getContextPath()%>/auth/base/",
                 $("#fm").serialize(),
                 function(data){
                     if (data.code != -1) {
                         layer.msg(data.msg, {icon: 6}, function(){
-                            parent.window.location.href = "<%=request.getContextPath()%>/auth/user/toList";
+                            parent.window.location.href = "<%=request.getContextPath()%>/auth/base/toList";
                         });
                         return;
                     }
@@ -34,12 +34,9 @@
 <body>
 
 <form id = "fm">
-    <input type="hidden" name="userId" value="${user.userId}"><br />
-    用户名:<input type="text" name="username" value="${user.username}"><br />
-    手机号:<input type="text" name="phone" value="${user.phone}"><br />
-    邮箱:<input type="text" name="email" value="${user.email}"><br />
-    性别:<input type="radio" name="sex" value="7" <c:if test="${user.sex == 7}">checked</c:if>> 男
-         <input type="radio" name="sex" value="8" <c:if test="${user.sex == 8}">checked</c:if>> 女<br />
+    <input type="hidden" name="_method" value="put"><br />
+    <input type="hidden" name="baseDataId" value="${baseData.baseDataId}"><br />
+    数据名:<input type="text" name="name" value="${baseData.name}"><br />
     <input type="button" value="修改提交" onclick="update()"><br />
 </form>
 </body>

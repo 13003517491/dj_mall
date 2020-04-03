@@ -113,4 +113,14 @@ public class UserDTOResp implements Serializable {
      */
     private String resetPassword;
 
+    /**
+     * 性别展示
+     */
+    private String sexShow;
+
+    /**
+     * 状态展示
+     */
+    private String statusShow;
+
 }

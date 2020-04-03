@@ -103,4 +103,14 @@ public class UserVOResp implements Serializable {
      * 重置密码
      */
     private String resetPassword;
+
+    /**
+     * 性别展示
+     */
+    private String sexShow;
+
+    /**
+     * 状态展示
+     */
+    private String statusShow;
 }

@@ -33,13 +33,9 @@
                         html += "<td>"+u.nickname+"</td>"
                         html += "<td>"+u.phone+"</td>"
                         html += "<td>"+u.email+"</td>"
-                        html += u.sex == 1 ? "<td>男</td>" : "<td>女</td>"
-                        html += u.roleShow != null ? "<td>"+u.roleShow+"</td>" : "<td>暂无角色</td>"
-                        if (u.status == -1) {
-                            html += "<td>未激活</td>"
-                        } else {
-                            html += "<td>正常</td>"
-                        }
+                        html += "<td>"+u.sexShow+"</td>"
+                        html += "<td>"+u.roleShow+"</td>"
+                        html += "<td>"+u.statusShow+"</td>"
                         html += "<td>"+u.createTime+"</td>"
                         html += u.lastLoginTime != null ? "<td>"+u.lastLoginTime+"</td>" : "<td>未登录过</td>"
                         html += "</tr>"
@@ -209,7 +205,7 @@
         }
 
 
-        //删除
+        //重置密码
         function updatePasswordById(){
             var length = $("input[name='id']:checked").length;
 
@@ -224,21 +220,31 @@
 
             var id = $("input[name='id']:checked").val();
             var index = layer.load(1,{shade:0.5});
+            layer.confirm('确定重置密码吗?', {icon: 3, title:'提示'}, function(index){
                 //do something
+                layer.msg('邮件发送较慢,请稍等', {
+                    icon: 1,
+                    time: 12000, //2秒关闭（如果不配置，默认是3秒）
+                    shade: [0.8, '#393D49']
+                }, function () {
                 $.post(
                     "<%=request.getContextPath()%>/auth/user/updatePasswordById",
                     {"id": id},
                     function(data){
                         if (data.code != -1) {
-                            layer.msg(data.msg, {icon: 6}, function(){
-                                window.location.href = "<%=request.getContextPath()%>/auth/user/toList";
-                            });
+                            window.location.href = "<%=request.getContextPath()%>/auth/user/toList";
+                            <%--layer.msg(data.msg, {icon: 6}, function(){--%>
+                            <%--    window.location.href = "<%=request.getContextPath()%>/auth/user/toList";--%>
+                            <%--});--%>
                             return;
                         }
                         layer.msg(data.msg, {icon: 5})
                         layer.close(index);
                     }
                 )
+                });
+            })
+            layer.close(index);
         }
     </script>
 </head>
@@ -250,12 +256,12 @@
         <input type="radio" name="roleId" value="${r.roleId}">${r.roleName}
     </c:forEach><br>
     性别:
-    <input type="radio" name="sex" value="1">男
-    <input type="radio" name="sex" value="2">女<br />
+    <input type="radio" name="sex" value="7">男
+    <input type="radio" name="sex" value="8">女<br />
     <select name = "status">
         <option value="">请选择</option>
-        <option value="-1">未激活</option>
-        <option value="1">正常</option>
+        <option value="10">未激活</option>
+        <option value="11">正常</option>
     </select>
     <input type="button" value="查询" onclick="search()"><br />
 </form>

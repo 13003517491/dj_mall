@@ -33,9 +33,9 @@ public class SystemConstant {
 	public static final String SUBJECT = "验证邮箱激活";
 
 	/**
-	 * 正常激活 1
+	 * 正常激活 10
 	 */
-    public static final Integer ACTIVE_SUCCESS = 1;
+    public static final Integer ACTIVE_SUCCESS = 10;
 
 	/**
 	 * 手机号不存在
@@ -86,4 +86,14 @@ public class SystemConstant {
 	 * 用户登录信息
 	 */
     public static final String USER_SESSION = "userEntity";
+
+	/**
+	 * 失效时间 2分钟
+	 */
+	public static final Integer MINUTIS_CODE = 2;
+
+	/**
+	 * 顶层
+	 */
+    public static final String SYSTEM = "SYSTEM";
 }

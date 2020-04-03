@@ -153,26 +153,13 @@
                     }
                 )
             });
-            <%--layer.msg('确定删除?', {--%>
-            <%--    time: 0 //不自动关闭--%>
-            <%--    , btn: ['确定', '取消']--%>
-            <%--    , yes: function () {--%>
-            <%--        $.post(--%>
-            <%--            "<%=request.getContextPath() %>/auth/resource/delById",--%>
-            <%--            {"id": value},--%>
-            <%--            function (data) {--%>
-            <%--                if (data.code == 200) {--%>
-            <%--                    layer.msg(data.msg, {--%>
-            <%--                        icon: 6,--%>
-            <%--                    }, function () {--%>
-            <%--                        window.location.href = "<%=request.getContextPath()%>/auth/resource/toList";--%>
-            <%--                    });--%>
-            <%--                } else {--%>
-            <%--                    layer.msg(data.msg, {icon: 5});--%>
-            <%--                }--%>
-            <%--            })--%>
-            <%--    }--%>
-            <%--})--%>
+            layer.msg('确定删除?', {
+                time: 0 //不自动关闭
+                , btn: ['确定', '取消']
+                , yes: function () {
+
+                }
+            })
         }
 
         //递归自我调用

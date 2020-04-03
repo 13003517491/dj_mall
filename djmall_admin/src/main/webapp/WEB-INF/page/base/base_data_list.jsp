@@ -26,7 +26,7 @@
                         html += "<td>"+b.code+"</td>"
                         html += "<td>"+b.name+"</td>"
                         html += "<td>"+b.pcode+"</td>"
-                        html += "<td><input type='button' value='修改' onclick='updateById("+b.id+")'></td>"
+                        html += "<td><input type='button' value='修改' onclick='updateById("+b.baseDataId+")'></td>"
                         html += "</tr>"
                     }
                     $("#tbd").html(html);
@@ -34,30 +34,57 @@
             )
         }
 
-        function add(){
-            layer.confirm('确定新增吗?', {icon: 3, title:'提示'}, function(index){
+        function updateById(id){
+            layer.confirm('确定修改吗?', {icon: 3, title:'提示'}, function(index){
                 //do something
                 layer.open({
                     type: 2,
-                    title: '基础数据新增页面',
+                    title: '基础数据修改页面',
                     shadeClose: true,
                     shade: 0.8,
                     area: ['380px', '90%'],
-                    content: '<%=request.getContextPath()%>/auth/role/toAdd'
+                    content: '<%=request.getContextPath()%>/auth/base/toUpdate?id='+id
                 });
             });
+        }
+
+        function add(){
+
+            layer.confirm('确定增加吗?', {icon: 3, title:'提示'}, function(index) {
+                var index = layer.load(1,{shade:0.5});
+                $.post(
+                    "<%=request.getContextPath()%>/auth/base/",
+                    $("#fm").serialize(),
+                    function (data) {
+                        if (data.code != -1) {
+                            layer.msg(data.msg, {icon: 6}, function () {
+                                window.location.href = "<%=request.getContextPath()%>/auth/role/toList";
+                            });
+                            return;
+                        }
+                        layer.msg(data.msg, {icon: 5})
+                        layer.close(index);
+                    }
+                )
+            })
+            layer.close(index);
         }
     </script>
 </head>
 <body>
-    分类上级
+    <form id="fm">
+        分类上级
         <select name="pCode">
             <option value="SYSTEM">SYSTEM</option>
+            <c:forEach items="${baseDataList}"  var="r" >
+                <option value="${r.code}">${r.name}</option>
+            </c:forEach>
         </select><br />
-    分类名称<input type="text" name="name"><br />
-    分类code<input type="text" name="code"><br />
-    <input type="button" value="新增" onclick="add()">
-
+        分类名称<input type="text" name="name"><br />
+        分类code<input type="text" name="code"><br />
+        <input type="button" value="新增" onclick="add()">
+        <input type="hidden" name="_method" value="post">
+    </form>
 <br />
 <table border="1px">
     <tr>

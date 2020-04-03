@@ -28,7 +28,7 @@
                 "<%=request.getContextPath()%>/auth/user/login",
                 $("#fm").serialize(),
                 function(data){
-                    if (data.code != -1) {
+                    if (data.code == 200) {
                         layer.msg(data.msg, {icon: 6}, function(){
                             window.location.href = "<%=request.getContextPath()%>/index/toIndex";
                         });

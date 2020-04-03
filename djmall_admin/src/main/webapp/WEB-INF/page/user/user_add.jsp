@@ -204,9 +204,9 @@
     </c:forEach><br/>
 <%--    <input type="radio" value="1" name="roleId" checked>商户--%>
 <%--    <input type="radio" value="2" name="roleId">管理员<br>--%>
-    性别:<input type="radio" name="sex" value="1" checked>男
-         <input type="radio" name="sex" value="2">女<br />
-    <input type="hidden" name="status" value="-1">
+    性别:<input type="radio" name="sex" value="7" checked>男
+         <input type="radio" name="sex" value="8">女<br />
+    <input type="hidden" name="status" value="11">
     <input type="hidden" name="isDel" value="1">
     <input type="hidden" name="salt" value="${salt}" id="salt">
     <a href="<%=request.getContextPath()%>/auth/user/toLogin">已有账号?前去登录</a>

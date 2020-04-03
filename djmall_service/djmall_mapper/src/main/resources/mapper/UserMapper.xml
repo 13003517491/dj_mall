@@ -19,24 +19,26 @@
 
     <!-- 展示 -->
     <select id = "findUserAll" resultType = "com.dj.mall.mapper.bo.user.UserBOResp">
-        select
+        SELECT
             u.id AS userId,
             u.username,
-            u.password,
+            u. PASSWORD,
             u.nickname,
             u.phone,
             u.email,
-            u.sex,
-            u.status,
+            bd.`name` AS sexShow,
+            bdd.`name` AS statusShow,
             u.create_time,
             u.last_login_time,
             u.is_del,
             r.role_name AS roleShow,
             r.id AS roleId
-        from
+        FROM
             djmall_auth_user u
-        left join djmall_auth_user_role ur on u.id = ur.user_id
-        left join djmall_auth_role r on ur.role_id =r.id
+        LEFT JOIN djmall_auth_user_role ur ON u.id = ur.user_id
+        LEFT JOIN djmall_auth_role r ON ur.role_id = r.id
+        LEFT JOIN djmall_auth_base_data bd ON u.sex = bd.id
+        LEFT JOIN djmall_auth_base_data bdd ON u.`status` = bdd.id
         <where>
             <if test="username != null and username != '' ">
                 u.username = #{username} or u.phone = #{username} or u.email = #{username}
