@@ -1,15 +1,15 @@
-package com.dj.mall.pro.auth.impl.base;
+package com.dj.mall.pro.dict.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.dj.mall.api.auth.base.BaseDataApi;
-import com.dj.mall.entity.auth.base.BaseDataEntity;
-import com.dj.mall.mapper.auth.base.BaseDataMapper;
+import com.dj.mall.api.dict.BaseDataApi;
+import com.dj.mall.entity.dict.BaseDataEntity;
+import com.dj.mall.mapper.dict.BaseDataMapper;
 import com.dj.mall.model.constant.SystemConstant;
-import com.dj.mall.model.dto.auth.base.BaseDataDTOReq;
-import com.dj.mall.model.dto.auth.base.BaseDataDTOResp;
+import com.dj.mall.model.dto.dict.BaseDataDTOReq;
+import com.dj.mall.model.dto.dict.BaseDataDTOResp;
 import com.dj.mall.model.util.DozerUtil;
 
 import java.util.List;

@@ -1,11 +1,8 @@
 package com.dj.mall.mapper.bo.user;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * @描述
@@ -63,16 +60,12 @@ public class UserBOResp implements Serializable {
     /**
      * 创建时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime;
+    private LocalDateTime createTime;
 
     /**
      * 最后登录时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date lastLoginTime;
+    private LocalDateTime lastLoginTime;
 
     /**
      * 盐
@@ -87,9 +80,7 @@ public class UserBOResp implements Serializable {
     /**
      * 验证时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date codeTime;
+    private LocalDateTime codeTime;
 
     /**
      * 角色id
@@ -115,4 +106,9 @@ public class UserBOResp implements Serializable {
      * 状态展示
      */
     private String statusShow;
+
+    /**
+     * 当前页
+     */
+    private Integer pageNo;
 }

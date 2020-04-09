@@ -3,6 +3,8 @@ package com.dj.mall.pro.auth.impl.user;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dj.mall.api.auth.user.UserApi;
 import com.dj.mall.entity.auth.record.TimeRecordEntity;
@@ -10,7 +12,9 @@ import com.dj.mall.entity.auth.user.UserEntity;
 import com.dj.mall.entity.auth.user.UserRoleEntity;
 import com.dj.mall.mapper.auth.user.UserMapper;
 import com.dj.mall.mapper.bo.user.UserBOReq;
+import com.dj.mall.mapper.bo.user.UserBOResp;
 import com.dj.mall.model.base.BusinessException;
+import com.dj.mall.model.base.PageResult;
 import com.dj.mall.model.constant.SystemConstant;
 import com.dj.mall.model.dto.auth.user.UserDTOReq;
 import com.dj.mall.model.dto.auth.user.UserDTOResp;
@@ -22,10 +26,8 @@ import com.dj.mall.pro.auth.service.user.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
-import java.text.DateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @描述
@@ -35,13 +37,11 @@ import java.util.List;
 @Service
 public class UserApiImpl extends ServiceImpl<UserMapper, UserEntity> implements UserApi {
 
-
     @Autowired
     private UserRoleService userRoleService;
 
     @Autowired
     private TimeRecordService timeRecordService;
-
 
     /**
      * 根据用户名和密码获取用户信息
@@ -73,24 +73,8 @@ public class UserApiImpl extends ServiceImpl<UserMapper, UserEntity> implements 
         if (!userEntity.getStatus().equals(SystemConstant.ACTIVE_SUCCESS)) {
             throw new BusinessException(SystemConstant.NOT_ACTIVE);
         }
-
-        if (null != userEntity) {
-            QueryWrapper<TimeRecordEntity> queryWrapper1 = new QueryWrapper();
-            queryWrapper1.eq("user_id", userEntity.getId());
-            if (timeRecordService.getOne(queryWrapper1) != null) {
-                UpdateWrapper<TimeRecordEntity> updateWrapper = new UpdateWrapper<>();
-                updateWrapper.set("last_login_time", new Date());
-                updateWrapper.eq("user_id", userEntity.getId());
-                timeRecordService.update(updateWrapper);
-            } else {
-                TimeRecordEntity timeRecordEntity = new TimeRecordEntity();
-                timeRecordEntity.setLastLoginTime(new Date());
-                timeRecordEntity.setUserId(userEntity.getId());
-                timeRecordService.save(timeRecordEntity);
-            }
-
-
-        }
+        TimeRecordEntity timeRecordEntity = TimeRecordEntity.builder().lastLoginTime(LocalDateTime.now()).userId(userEntity.getId()).build();
+        timeRecordService.save(timeRecordEntity);
         return DozerUtil.map(userEntity, UserDTOResp.class);
     }
 
@@ -147,10 +131,13 @@ public class UserApiImpl extends ServiceImpl<UserMapper, UserEntity> implements 
     public void saveUser(UserDTOReq userDTOReq) throws Exception {
         UserEntity user = DozerUtil.map(userDTOReq, UserEntity.class);
         this.save(user);
-        UserRoleEntity userRoleEntity = new UserRoleEntity();
-        userRoleEntity.setRoleId(userDTOReq.getRoleId());
-        userRoleEntity.setUserId(user.getId());
+        UserRoleEntity userRoleEntity = UserRoleEntity.builder().roleId(userDTOReq.getRoleId()).userId(user.getId()).isDel(SystemConstant.NOT_DEL).build();
         userRoleService.save(userRoleEntity);
+        String content = "<a href='http://127.0.0.1:8081/admin/auth/user/toValidate?username=" + userDTOReq.getUsername() + "'>点此验证</a><br>"
+                + "如果您无法点击以上链接，请复制以下网址到浏览器里直接打开：<br>"
+                + "127.0.0.1:8081/admin/auth/user/toValidate?username=" + userDTOReq.getUsername() + "<br>"
+                + "如果您没有注册，请忽略此邮件";
+        JavaEmailUtils.sendEmail(userDTOReq.getEmail(), SystemConstant.SUBJECT, content);
     }
 
     /**
@@ -188,14 +175,9 @@ public class UserApiImpl extends ServiceImpl<UserMapper, UserEntity> implements 
     @Override
     public void updateCodeAndCodeTimeByPhone(String phone, Integer newcode) throws Exception {
         //根据手机号修改验证码
-        //时间加减
-        Calendar cal = Calendar.getInstance();
-        //设置起时间
-        cal.setTime(new Date());
-        //增加一分钟
-        cal.add(Calendar.MINUTE, SystemConstant.MINUTIS_CODE);
         UpdateWrapper<UserEntity> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.set("code_time", cal.getTime()).set("code", newcode);
+        updateWrapper.set("code_time", LocalDateTime.now().plusMinutes(SystemConstant.MINUTIS_CODE))
+                     .set("code", newcode);
         updateWrapper.eq("phone", phone);
         this.update(updateWrapper);
     }
@@ -226,6 +208,10 @@ public class UserApiImpl extends ServiceImpl<UserMapper, UserEntity> implements 
         updateWrapper.set("salt", userDTOReq.getSalt())
                 .set("password", userDTOReq.getPassword());
         updateWrapper.eq("phone", userDTOReq.getPhone());
+        //发送邮件
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String nowStr = dateTimeFormatter.format(LocalDateTime.now());
+        JavaEmailUtils.sendEmail(userDTOReq.getEmail(), "修改密码", "您的账户"+userDTOReq.getNickname()+"，于"+nowStr+"时进行密码修改成功。");
         this.update(updateWrapper);
     }
 
@@ -237,8 +223,12 @@ public class UserApiImpl extends ServiceImpl<UserMapper, UserEntity> implements 
      * @throws Exception
      */
     @Override
-    public List<UserDTOResp> findUserAll(UserDTOReq userDTOReq) throws Exception {
-        return DozerUtil.mapList(getBaseMapper().findUserAll(DozerUtil.map(userDTOReq, UserBOReq.class)), UserDTOResp.class);
+    public PageResult findUserAll(UserDTOReq userDTOReq) throws Exception {
+        Page<UserEntity> page = new Page();
+        page.setCurrent(userDTOReq.getPageNo()).setSize(SystemConstant.PAGE_SIZE);
+        IPage<UserBOResp> pageInfo =  getBaseMapper().findUserAll(page, DozerUtil.map(userDTOReq, UserBOReq.class));
+        PageResult pageResult = PageResult.builder().list(DozerUtil.mapList(pageInfo.getRecords(), UserDTOResp.class)).pages(pageInfo.getPages()).build();
+        return pageResult;
     }
 
     /**
@@ -342,10 +332,6 @@ public class UserApiImpl extends ServiceImpl<UserMapper, UserEntity> implements 
         String salt = PasswordSecurityUtil.generateSalt();
         String md5Pwd = PasswordSecurityUtil.enCode32(resetPassword);
         String md5ResetPwd = PasswordSecurityUtil.enCode32(md5Pwd + salt);
-        System.out.println("初始密码 = " + resetPassword);
-        System.out.println("盐 = " + salt);
-        System.out.println("初始密码mds加密 = " + md5Pwd);
-        System.out.println("md5加密(初始密码mds加密+盐) = " + md5ResetPwd);
         UpdateWrapper<UserEntity> updateWrapper = new UpdateWrapper();
         updateWrapper.set("password", md5ResetPwd)
                      .set("reset_password", md5ResetPwd)
@@ -354,10 +340,13 @@ public class UserApiImpl extends ServiceImpl<UserMapper, UserEntity> implements 
         this.update(updateWrapper);
         UserEntity user = this.getById(id);
         //发送邮件
-        DateFormat df = DateFormat.getDateTimeInstance();
+        //DateFormat df = DateFormat.getDateTimeInstance();
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String nowStr = dateTimeFormatter.format(now);
         JavaEmailUtils.sendEmail(user.getEmail(), "重置密码",
-                "您的密码已被管理员于"+df.format(new Date())+"时重置为"+resetPassword+".为了您的账户安全，请及时修改。</br>" +
-                        "<a href='http://localhost:8081/admin/auth/user/toLogin'>点我去登陆</a><br>"
+                "您的密码已被管理员于"+nowStr+"时重置为"+resetPassword+".为了您的账户安全，请及时修改。</br>" +
+                        "<a href='http://127.0.0.1:8081/admin/auth/user/toLogin'>点我去登陆</a><br>"
                         );
     }
 

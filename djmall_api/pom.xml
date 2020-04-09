@@ -11,6 +11,7 @@
 
     <modules>
         <module>djmall_auth_api</module>
+        <module>djmall_dict_api</module>
     </modules>
     <artifactId>djmall_api</artifactId>
     <packaging>pom</packaging>

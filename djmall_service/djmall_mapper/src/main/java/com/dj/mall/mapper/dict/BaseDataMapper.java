@@ -1,7 +1,7 @@
-package com.dj.mall.mapper.auth.base;
+package com.dj.mall.mapper.dict;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.dj.mall.entity.auth.base.BaseDataEntity;
+import com.dj.mall.entity.dict.BaseDataEntity;
 
 /**
  * @author ZhangJQ

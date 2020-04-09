@@ -1,13 +1,14 @@
-package com.dj.mall.admin.web.auth.base;
+package com.dj.mall.admin.web.dict;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.dj.mall.admin.vo.auth.base.BaseDataVOReq;
-import com.dj.mall.api.auth.base.BaseDataApi;
+import com.dj.mall.admin.vo.PermissionCode;
+import com.dj.mall.admin.vo.dict.BaseDataVOReq;
+import com.dj.mall.api.dict.BaseDataApi;
 import com.dj.mall.model.base.ResultModel;
-import com.dj.mall.model.dto.auth.base.BaseDataDTOReq;
-import com.dj.mall.model.dto.auth.base.BaseDataDTOResp;
+import com.dj.mall.model.dto.dict.BaseDataDTOReq;
+import com.dj.mall.model.dto.dict.BaseDataDTOResp;
 import com.dj.mall.model.util.DozerUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class BaseDataController {
      * @return
      */
     @GetMapping
+    @RequiresPermissions(value = PermissionCode.BASEDATA_DICTIONAR)
     public ResultModel<Object> list() throws Exception {
         List<BaseDataDTOResp> baseDataList = baseDataApi.getBaseData();
         return new ResultModel<>().success(baseDataList);
@@ -43,6 +45,7 @@ public class BaseDataController {
      * @throws Exception
      */
     @PutMapping
+    @RequiresPermissions(value = PermissionCode.BASEDATA_UPDATE_BTN)
     public ResultModel<Object> update(String name, Integer baseDataId) throws Exception {
         baseDataApi.updateNameById(name, baseDataId);
         return new ResultModel<>().success();
@@ -55,6 +58,7 @@ public class BaseDataController {
      * @throws Exception
      */
     @PostMapping
+    @RequiresPermissions(value = PermissionCode.BASEDATA_ADD_BTN)
     public ResultModel<Object> add(BaseDataVOReq baseDataVOReq) throws Exception {
         baseDataApi.saveBaseData(DozerUtil.map(baseDataVOReq, BaseDataDTOReq.class));
         return new ResultModel<>().success();

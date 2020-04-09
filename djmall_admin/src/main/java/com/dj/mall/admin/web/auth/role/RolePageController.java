@@ -36,6 +36,7 @@ public class RolePageController {
      * 去新增
      */
     @RequestMapping("toAdd")
+    @RequiresPermissions(value = PermissionCode.ROLE_ADD_BTN)
     public String toAdd() {
         return "role/role_add";
     }
@@ -44,6 +45,7 @@ public class RolePageController {
      * 去修改页面
      */
     @RequestMapping("toUpdate")
+    @RequiresPermissions(value = PermissionCode.ROLE_UPDATE_BTN)
     public String toUpdate(Integer id, Model model) throws Exception {
         RoleDTOResp roleDTOResp = roleApi.getRoleById(id);
         model.addAttribute("role", roleDTOResp);
@@ -58,6 +60,7 @@ public class RolePageController {
      * @return
      */
     @RequestMapping("toRoleResList")
+    @RequiresPermissions(value = PermissionCode.ROLE_ROLERESOURCE_BTN)
     public String toResource(Integer roleId, Model model) {
         model.addAttribute("roleId", roleId);
         return "role/role_res_list";

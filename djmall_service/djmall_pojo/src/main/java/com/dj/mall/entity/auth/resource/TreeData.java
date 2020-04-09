@@ -1,6 +1,9 @@
 package com.dj.mall.entity.auth.resource;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -10,6 +13,9 @@ import java.io.Serializable;
  * @创建时间 2020/3/30
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TreeData implements Serializable {
 
     /**

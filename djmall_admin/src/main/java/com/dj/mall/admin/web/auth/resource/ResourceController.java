@@ -3,6 +3,7 @@ package com.dj.mall.admin.web.auth.resource;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.dj.mall.admin.vo.PermissionCode;
 import com.dj.mall.admin.vo.auth.resource.ResourceVOReq;
 import com.dj.mall.admin.vo.auth.resource.ResourceVOResp;
 import com.dj.mall.api.auth.resource.ResourceApi;
@@ -14,6 +15,7 @@ import com.dj.mall.model.dto.auth.resource.ResourceDTOReq;
 import com.dj.mall.model.dto.auth.resource.ResourceDTOResp;
 import com.dj.mall.model.dto.auth.user.UserDTOResp;
 import com.dj.mall.model.util.DozerUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,11 +45,11 @@ public class ResourceController {
     public ResultModel<Object> list(HttpSession session) {
         UserDTOResp userDTORespList = (UserDTOResp) session.getAttribute(SystemConstant.USER_SESSION);
         List<ResourceDTOResp> menuList = new ArrayList<>();
-        for (ResourceDTOResp resource : userDTORespList.getPermissionList()) {
+        userDTORespList.getPermissionList().forEach(resource -> {
             if (resource.getResourceType().equals(SystemConstant.MENU_SHOW)) {
                 menuList.add(resource);
             }
-        }
+        });
         return new ResultModel<>().success(DozerUtil.mapList(menuList, ResourceVOResp.class));
     }
 
@@ -57,6 +59,7 @@ public class ResourceController {
      * @throws Exception
      */
     @RequestMapping("show")
+    @RequiresPermissions(value = PermissionCode.RESOURCE_MANAGER)
     public ResultModel<Object> show() throws Exception {
         List<ResourceDTOResp> resourceDTORespList = resourceApi.getResource();
         return new ResultModel<>().success(resourceDTORespList);
@@ -82,6 +85,7 @@ public class ResourceController {
      * @throws Exception
      */
     @RequestMapping("update")
+    @RequiresPermissions(value = PermissionCode.RESOURCE_UPDATE_BTN)
     public ResultModel<Object> update(ResourceVOReq resourceVOReq) throws Exception {
         resourceApi.updateResourceById(DozerUtil.map(resourceVOReq, ResourceDTOReq.class));
         return new ResultModel<>().success();
@@ -94,6 +98,7 @@ public class ResourceController {
      * @throws Exception
      */
     @RequestMapping("delById")
+    @RequiresPermissions(value = PermissionCode.RESOURCE_DEL_BTN)
     public ResultModel<Object> delById(Integer id) throws Exception {
         resourceApi.delResAndRoleResByIds(id);
         return new ResultModel<>().success();
@@ -105,6 +110,7 @@ public class ResourceController {
      * @return
      */
     @RequestMapping("add")
+    @RequiresPermissions(value = PermissionCode.RESOURCE_ADD_BTN)
     public ResultModel<Object> add(ResourceVOReq resourceVOReq) throws Exception {
         resourceApi.saveResource(DozerUtil.map(resourceVOReq, ResourceDTOReq.class));
         return new ResultModel<>().success();

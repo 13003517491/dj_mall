@@ -24,8 +24,8 @@
                 $("#fm").serialize(),
                 function(data){
                     var html = "";
-                    for (var i = 0; i < data.data.length; i++) {
-                        var u = data.data[i];
+                    for (var i = 0; i < data.data.list.length; i++) {
+                        var u = data.data.list[i];
                         html += "<tr>"
                         html += "<td><input type = 'checkbox' name = 'id' value = '"+u.userId+"'>";
                         html += "<td>"+u.userId+"</td>"
@@ -40,9 +40,34 @@
                         html += u.lastLoginTime != null ? "<td>"+u.lastLoginTime+"</td>" : "<td>未登录过</td>"
                         html += "</tr>"
                     }
+                    // var html1 = "角色:"
+                    // for(var i = 0; i < data.data.roleList.length; i++) {
+                    //     html1 += "<input type='radio' name='roleId' value='"+data.data.roleList[i].roleId+"'>"+data.data.roleList[i].roleName+""
+                    // }
+                    // $("#tbd1").html(html1);
                     $("#tbd").html(html);
+                    var pageNo = $("#pageNo").val();
+                    var pageHtml = "<input type='button' value='上一页' onclick='page("+data.data.pages+", "+(parseInt(pageNo) - 1)+")'>";
+                    pageHtml += "<input type='button' value='下一页' onclick='page("+data.data.pages+", "+(parseInt(pageNo) + 1)+")')'>";
+                    $("#pageInfo").html(pageHtml);
                 }
             )
+        }
+
+
+        function page(pages, page) {
+
+            if (page < 1) {
+                layer.msg('已经到首页啦!', {icon:0});
+                return;
+            }
+            if (page > pages) {
+                layer.msg('已经到尾页啦!!', {icon:0});
+                return;
+            }
+            $("#pageNo").val(page);
+            search();
+
         }
         //去修改
         function updateById(){
@@ -222,9 +247,9 @@
             var index = layer.load(1,{shade:0.5});
             layer.confirm('确定重置密码吗?', {icon: 3, title:'提示'}, function(index){
                 //do something
-                layer.msg('邮件发送较慢,请稍等', {
-                    icon: 1,
-                    time: 12000, //2秒关闭（如果不配置，默认是3秒）
+                layer.msg('邮件发送较慢,请稍等片刻......', {
+                    icon: 7,
+                    time: 5000, //2秒关闭（如果不配置，默认是3秒）
                     shade: [0.8, '#393D49']
                 }, function () {
                 $.post(
@@ -255,29 +280,33 @@
     <c:forEach items="${roleList}" var="r" >
         <input type="radio" name="roleId" value="${r.roleId}">${r.roleName}
     </c:forEach><br>
+<%--    <span id="tbd1">--%>
+
+<%--    </span><br>--%>
     性别:
     <input type="radio" name="sex" value="7">男
     <input type="radio" name="sex" value="8">女<br />
     <select name = "status">
         <option value="">请选择</option>
-        <option value="10">未激活</option>
-        <option value="11">正常</option>
+        <option value="11">未激活</option>
+        <option value="10">正常</option>
     </select>
     <input type="button" value="查询" onclick="search()"><br />
+    <input type="hidden" value="1" id="pageNo" name="pageNo">
 </form>
-    <shiro:hasPermission name="USER_UPDATE">
+    <shiro:hasPermission name="USER_UPDATE_BTN">
         <input type="button" value="修改" onclick="updateById()">&nbsp;&nbsp;
     </shiro:hasPermission>
-    <shiro:hasPermission name="USER_ACTIVE">
+    <shiro:hasPermission name="USER_ACTIVE_BTN">
         <input type="button" value="激活" onclick="updateStatusById()">&nbsp;&nbsp;
     </shiro:hasPermission>
-    <shiro:hasPermission name="USER_RESETPWD">
+    <shiro:hasPermission name="USER_RESETPWD_BTN">
         <input type="button" value="重置密码" onclick="updatePasswordById()">&nbsp;&nbsp;
     </shiro:hasPermission>
-    <shiro:hasPermission name="USER_DEL">
+    <shiro:hasPermission name="USER_DEL_BTN">
         <input type="button" value="删除" onclick="delByIds()">&nbsp;
     </shiro:hasPermission>
-    <shiro:hasPermission name="USER_AUTH">
+    <shiro:hasPermission name="USER_AUTH_BTN">
         <input type="button" value="授权" onclick="updateUserRoleById()">
     </shiro:hasPermission>
 
@@ -299,5 +328,8 @@
 
         </tbody>
     </table>
+<div id="pageInfo">
+
+</div>
 </body>
 </html>

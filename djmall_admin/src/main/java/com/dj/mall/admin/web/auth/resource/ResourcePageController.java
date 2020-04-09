@@ -32,6 +32,7 @@ public class ResourcePageController {
      * @throws Exception
      */
     @RequestMapping("toUpdate")
+    @RequiresPermissions(value = PermissionCode.RESOURCE_UPDATE_BTN)
     public String toUpdate(Integer resourceId, Model model) throws Exception {
         model.addAttribute("resource", resourceApi.getResourceById(resourceId));
         return "resource/resource_update";
@@ -41,10 +42,10 @@ public class ResourcePageController {
      * 去新增
      */
     @RequestMapping("toAdd/{pId}")
+    @RequiresPermissions(value = PermissionCode.RESOURCE_ADD_BTN)
     public String toAdd(@PathVariable Integer pId, Model model) {
         model.addAttribute("pId", pId);
         return "resource/resource_add";
     }
-//
 
 }

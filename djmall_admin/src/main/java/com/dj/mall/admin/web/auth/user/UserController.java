@@ -1,27 +1,27 @@
 package com.dj.mall.admin.web.auth.user;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.dj.mall.admin.vo.PermissionCode;
 import com.dj.mall.admin.vo.auth.user.UserVOReq;
 import com.dj.mall.admin.vo.auth.user.UserVOResp;
 import com.dj.mall.api.auth.resource.ResourceApi;
 import com.dj.mall.api.auth.user.UserApi;
+import com.dj.mall.model.base.PageResult;
 import com.dj.mall.model.base.ResultModel;
 import com.dj.mall.model.constant.SystemConstant;
 import com.dj.mall.model.dto.auth.user.UserDTOReq;
 import com.dj.mall.model.dto.auth.user.UserDTOResp;
 import com.dj.mall.model.util.DozerUtil;
-import com.dj.mall.model.util.JavaEmailUtils;
 import com.dj.mall.model.util.MessageVerifyUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDateTime;
 
 /**
  * @描述
@@ -91,13 +91,8 @@ public class UserController {
      */
     @RequestMapping("add")
     public ResultModel<Object> add (UserVOReq userVOReq) throws Exception{
-        userVOReq.setCreateTime(new Date());
+        userVOReq.setCreateTime(LocalDateTime.now());
         userApi.saveUser(DozerUtil.map(userVOReq, UserDTOReq.class));
-        String content = "<a href='http://localhost:8081/admin/auth/user/toValidate?username=" + userVOReq.getUsername() + "'>点此验证</a><br>"
-                + "如果您无法点击以上链接，请复制以下网址到浏览器里直接打开：<br>"
-                + "localhost:8081/admin/auth/user/toValidate?username=" + userVOReq.getUsername() + "<br>"
-                + "如果您没有注册，请忽略此邮件";
-        JavaEmailUtils.sendEmail(userVOReq.getEmail(), SystemConstant.SUBJECT, content);
         return new ResultModel<Object>().success();
     }
 
@@ -130,19 +125,21 @@ public class UserController {
         //判断数据库中是否存在此条数据
         Assert.notNull(userDTOResp, SystemConstant.NOT_CODE);
         //验证码已失效
-        Assert.state(System.currentTimeMillis() < userDTOResp.getCodeTime().getTime(), SystemConstant.FALSE_CODE);
+        Assert.state(userDTOResp.getCodeTime().isAfter(LocalDateTime.now()), SystemConstant.FALSE_CODE);
         //删除过的用户提示用户已删除
         Assert.state(userDTOResp.getIsDel().equals(SystemConstant.NOT_DEL), SystemConstant.DEL);
         //存进新的密码和盐
+        userVOReq.setEmail(userDTOResp.getEmail());
+        userVOReq.setNickname(userDTOResp.getNickname());
         userApi.updateSaltAndPwdByPhone(DozerUtil.map(userVOReq, UserDTOReq.class));
-        //发送邮件
-        DateFormat df = DateFormat.getDateTimeInstance();
-        JavaEmailUtils.sendEmail(userDTOResp.getEmail(), "修改密码", "您的账户"+userDTOResp.getNickname()+"，于"+df.format(new Date())+"时进行密码修改成功。");
         return new ResultModel<>().success();
     }
 
     /**
      * 修改密码
+     * @param userVOReq 接收参数
+     * @return
+     * @throws Exception
      */
     @RequestMapping("updatePasswordByUsername")
     public ResultModel<Object> updatePasswordByUsername(UserVOReq userVOReq) throws Exception{
@@ -156,9 +153,12 @@ public class UserController {
      * @return
      */
     @RequestMapping("list")
+    @RequiresPermissions(value = PermissionCode.USER_MANAGER)
     public ResultModel<Object> list(UserVOReq userVOReq) throws Exception{
-        List<UserDTOResp> userList = userApi.findUserAll(DozerUtil.map(userVOReq, UserDTOReq.class));
-        return new ResultModel<>().success(DozerUtil.mapList(userList, UserVOResp.class));
+        PageResult pageResult = userApi.findUserAll(DozerUtil.map(userVOReq, UserDTOReq.class));
+        pageResult.setList(DozerUtil.mapList(pageResult.getList(), UserVOResp.class));
+        return new ResultModel<>().success(pageResult);
+
     }
 
     /**
@@ -167,6 +167,7 @@ public class UserController {
      * @return
      */
     @RequestMapping("update")
+    @RequiresPermissions(value = PermissionCode.USER_UPDATE_BTN)
     public ResultModel<Object> update(UserVOReq userVOReq) throws Exception {
         userApi.updateUserById(DozerUtil.map(userVOReq, UserDTOReq.class));
         return new ResultModel<>().success();
@@ -179,6 +180,7 @@ public class UserController {
      * @return
      */
     @RequestMapping("updateUserRole")
+    @RequiresPermissions(value = PermissionCode.USER_AUTH_BTN)
     public ResultModel<Object> updateUserRole(Integer userId, Integer roleId) throws Exception {
         userApi.updateUserRole(userId, roleId);
         return new ResultModel<>().success();
@@ -190,6 +192,7 @@ public class UserController {
      * @return
      */
     @RequestMapping("updateStatusById")
+    @RequiresPermissions(value = PermissionCode.USER_ACTIVE_BTN)
     public ResultModel<Object> updateStatusById(Integer id) throws Exception {
         UserDTOResp userDTOResp = userApi.getUserById(id);
         if (userDTOResp.getStatus().equals(SystemConstant.ACTIVE_SUCCESS)) {
@@ -205,6 +208,7 @@ public class UserController {
      * @return
      */
     @RequestMapping("delByIds")
+    @RequiresPermissions(value = PermissionCode.USER_DEL_BTN)
     public ResultModel<Object> delByIds(Integer[] ids) throws Exception {
         userApi.delUserAndUserRoleByIds(ids);
         return new ResultModel<>().success();
@@ -216,6 +220,7 @@ public class UserController {
      * @return
      */
     @RequestMapping("updatePasswordById")
+    @RequiresPermissions(value = PermissionCode.USER_RESETPWD_BTN)
     public ResultModel<Object> updatePasswordById(Integer id) throws Exception {
         userApi.updatePasswordById(id);
         return new ResultModel<>().success();

@@ -181,13 +181,13 @@
 </head>
 <body>
 <%--<input type="button" value="新增一级资源" onclick="saveOne()">--%>
-    <shiro:hasPermission name="RESOURCE_ADD">
+    <shiro:hasPermission name="RESOURCE_ADD_BTN">
         <input type="button" value="新增" onclick="saveTwo()">
     </shiro:hasPermission>
-    <shiro:hasPermission name="RESOURCE_UPDATE">
+    <shiro:hasPermission name="RESOURCE_UPDATE_BTN">
         <input type="button" value="修改" onclick="updateRes()">
     </shiro:hasPermission>
-    <shiro:hasPermission name="RESOURCE_DEL">
+    <shiro:hasPermission name="RESOURCE_DEL_BTN">
         <input type="button" value="删除" onclick="deleRes()">
     </shiro:hasPermission>
 

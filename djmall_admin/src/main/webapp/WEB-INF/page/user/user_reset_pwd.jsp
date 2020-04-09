@@ -31,8 +31,8 @@
         <br><br><br>
         <input type = "text" name = "code" id = "verify" placeholder="短信验证码"/>
         <input type="button"  value="获取验证码" onclick="getNum(this)" /><br/>
-        <input type="text" name="password" id="pwd" placeholder="新密码"/><br>
-        <input type="text" name="userPwd1" placeholder="确认新密码"/><br>
+        <input type="password" name="password" id="pwd" placeholder="新密码"/><br>
+        <input type="password" name="userPwd1" placeholder="确认新密码"/><br>
         <input type ="submit" value="确定" >
         <input type="button" onclick="back()" value="取消">
         <input type="hidden" name="salt" id="salt" value="${salt}">

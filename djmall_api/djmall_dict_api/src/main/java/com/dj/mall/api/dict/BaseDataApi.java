@@ -1,7 +1,7 @@
-package com.dj.mall.api.auth.base;
+package com.dj.mall.api.dict;
 
-import com.dj.mall.model.dto.auth.base.BaseDataDTOReq;
-import com.dj.mall.model.dto.auth.base.BaseDataDTOResp;
+import com.dj.mall.model.dto.dict.BaseDataDTOReq;
+import com.dj.mall.model.dto.dict.BaseDataDTOResp;
 
 import java.util.List;
 

@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -54,17 +55,22 @@ public class ShiroConfiguration {
         shiroFilterFactoryBean.setSuccessUrl("/index/toIndex");
         // 设置未授权界面，权限认证失败会访问该 URL
         shiroFilterFactoryBean.setUnauthorizedUrl("/403.jsp");
-        Map<String, String> filters = new HashMap<>();
-//        // anon 表示不需要认证
-//        filters.put("/auth/user/login", "anon");
-//        filters.put("/static/**", "anon");
-//        filters.put("/auth/user/add", "anon");
-//        filters.put("/auth/user/toAdd", "anon");
-//        filters.put("/auth/user/updatePwd", "anon");
-//        filters.put("/auth/user/getSalt", "anon");
-//        filters.put("/user/toResetPwd", "anon");
-//        // authc 表示必须认证才可访问
-//        filters.put("/**", "authc");
+        Map<String, String> filters = new LinkedHashMap<>();
+        // anon 表示不需要认证
+        filters.put("/static/**", "anon");
+        filters.put("/auth/user/login", "anon");
+        filters.put("/auth/user/add", "anon");
+        filters.put("/auth/user/getSalt", "anon");
+        filters.put("/auth/user/distinct", "anon");
+        filters.put("/auth/user/sendMessage", "anon");
+        filters.put("/auth/user/updatePwd", "anon");
+        filters.put("/auth/user/updatePasswordByUsername", "anon");
+        filters.put("/auth/user/toAdd", "anon");
+        filters.put("/auth/user/toValidate", "anon");
+        filters.put("/auth/user/toResetPwd", "anon");
+        filters.put("/auth/user/toUpdatePwd", "anon");
+        // authc 表示必须认证才可访问
+        filters.put("/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filters);
         return shiroFilterFactoryBean;
     }

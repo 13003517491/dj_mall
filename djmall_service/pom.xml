@@ -13,6 +13,7 @@
         <module>djmall_auth_provider</module>
         <module>djmall_mapper</module>
         <module>djmall_pojo</module>
+        <module>djmall_dict_provider</module>
     </modules>
     <artifactId>djmall_service</artifactId>
 

@@ -2,10 +2,9 @@ package com.dj.mall.api.auth.user;
 
 import com.dj.mall.entity.auth.user.UserRoleEntity;
 import com.dj.mall.model.base.BusinessException;
+import com.dj.mall.model.base.PageResult;
 import com.dj.mall.model.dto.auth.user.UserDTOReq;
 import com.dj.mall.model.dto.auth.user.UserDTOResp;
-
-import java.util.List;
 
 /**
  * @描述 用户接口
@@ -83,7 +82,7 @@ public interface UserApi {
      * @return
      * @throws Exception
      */
-    List<UserDTOResp> findUserAll(UserDTOReq userDTOReq) throws Exception;
+    PageResult findUserAll(UserDTOReq userDTOReq) throws Exception;
 
     /**
      * 根据id获取用户

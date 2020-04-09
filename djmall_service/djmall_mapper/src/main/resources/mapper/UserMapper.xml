@@ -29,7 +29,7 @@
             bd.`name` AS sexShow,
             bdd.`name` AS statusShow,
             u.create_time,
-            u.last_login_time,
+            MAX(tr.last_login_time)As last_login_time,
             u.is_del,
             r.role_name AS roleShow,
             r.id AS roleId
@@ -39,22 +39,24 @@
         LEFT JOIN djmall_auth_role r ON ur.role_id = r.id
         LEFT JOIN djmall_auth_base_data bd ON u.sex = bd.id
         LEFT JOIN djmall_auth_base_data bdd ON u.`status` = bdd.id
+        LEFT JOIN djmall_auth_time_record tr ON tr.user_id = u.id
         <where>
-            <if test="username != null and username != '' ">
-                u.username = #{username} or u.phone = #{username} or u.email = #{username}
+            <if test="query.roleId != null">
+                and ur.role_id = #{query.roleId}
             </if>
-            <if test="roleId != null">
-                and ur.role_id = #{roleId}
+            <if test="query.sex != null">
+                and u.sex = #{query.sex}
             </if>
-            <if test="sex != null">
-                and u.sex = #{sex}
+            <if test="query.status != null">
+                and u.status = #{query.status}
             </if>
-            <if test="status != null">
-                and u.status = #{status}
+            <if test="query.username != null and query.username != '' ">
+                AND u.username like "%"#{query.username}"%" or u.phone = "%"#{query.username}"%" or u.email = "%"#{query.username}"%"
             </if>
             and u.is_del = 1
             and ur.is_del = 1
             and r.is_del = 1
+            GROUP BY u.id
             order by u.id desc
         </where>
     </select>

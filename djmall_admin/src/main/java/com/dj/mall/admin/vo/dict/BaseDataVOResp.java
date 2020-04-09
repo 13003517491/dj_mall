@@ -1,16 +1,16 @@
-package com.dj.mall.model.dto.auth.base;
+package com.dj.mall.admin.vo.dict;
 
 import lombok.Data;
 
 import java.io.Serializable;
 
 /**
- * @描述 基础数据DTO Req
+ * @描述 基础数据VO Resp
  * @创建人 zhangjq
  * @创建时间 2020/4/1
  */
 @Data
-public class BaseDataDTOReq implements Serializable {
+public class BaseDataVOResp implements Serializable {
     /**
      * 基础数据ID
      */

@@ -1,7 +1,10 @@
 package com.dj.mall.entity.auth.user;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -11,6 +14,9 @@ import java.io.Serializable;
  * @创建时间 2020/3/29
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @TableName("djmall_auth_user_role")
 public class UserRoleEntity implements Serializable {
 

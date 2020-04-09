@@ -1,4 +1,4 @@
-package com.dj.mall.model.dto.auth.base;
+package com.dj.mall.model.dto.dict;
 
 import lombok.Data;
 

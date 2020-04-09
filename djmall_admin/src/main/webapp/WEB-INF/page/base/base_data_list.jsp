@@ -26,7 +26,7 @@
                         html += "<td>"+b.code+"</td>"
                         html += "<td>"+b.name+"</td>"
                         html += "<td>"+b.pcode+"</td>"
-                        html += "<td><input type='button' value='修改' onclick='updateById("+b.baseDataId+")'></td>"
+                        html += "<td><shiro:hasPermission name='BASEDATA_UPDATE_BTN'><input type='button' value='修改' onclick='updateById("+b.baseDataId+")'></shiro:hasPermission></td>"
                         html += "</tr>"
                     }
                     $("#tbd").html(html);
@@ -35,7 +35,7 @@
         }
 
         function updateById(id){
-            layer.confirm('确定修改吗?', {icon: 3, title:'提示'}, function(index){
+            layer.confirm('确定修改吗?', {icon: 3, title:'提示'}, function(){
                 //do something
                 layer.open({
                     type: 2,
@@ -58,7 +58,7 @@
                     function (data) {
                         if (data.code != -1) {
                             layer.msg(data.msg, {icon: 6}, function () {
-                                window.location.href = "<%=request.getContextPath()%>/auth/role/toList";
+                                window.location.href = "<%=request.getContextPath()%>/auth/base/toList";
                             });
                             return;
                         }
@@ -82,7 +82,9 @@
         </select><br />
         分类名称<input type="text" name="name"><br />
         分类code<input type="text" name="code"><br />
-        <input type="button" value="新增" onclick="add()">
+        <shiro:hasPermission name="BASEDATA_ADD_BTN">
+            <input type="button" value="新增" onclick="add()">
+        </shiro:hasPermission>
         <input type="hidden" name="_method" value="post">
     </form>
 <br />

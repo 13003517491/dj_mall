@@ -137,16 +137,16 @@
     </script>
 </head>
 <body>
-    <shiro:hasPermission name="ROLE_ADD">
+    <shiro:hasPermission name="ROLE_ADD_BTN">
         <input type="button" value="新增" onclick="add()">
     </shiro:hasPermission>
-    <shiro:hasPermission name="ROLE_UPDATE">
+    <shiro:hasPermission name="ROLE_UPDATE_BTN">
         <input type='button' value='修改' onclick='updateById()'>
     </shiro:hasPermission>
-    <shiro:hasPermission name="ROLE_DEL">
+    <shiro:hasPermission name="ROLE_DEL_BTN">
         <input type='button' value='删除' onclick='delById()'>
     </shiro:hasPermission>
-    <shiro:hasPermission name="ROLE_ROLERESOURCE">
+    <shiro:hasPermission name="ROLE_ROLERESOURCE_BTN">
         <input type='button' value='关联资源' onclick='addRoleResources()'>
     </shiro:hasPermission>
 

@@ -96,4 +96,9 @@ public class SystemConstant {
 	 * 顶层
 	 */
     public static final String SYSTEM = "SYSTEM";
+
+	/**
+	 * 每页展示条数 2
+	 */
+	public static final long PAGE_SIZE = 2;
 }
